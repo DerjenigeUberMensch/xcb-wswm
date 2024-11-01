@@ -95,7 +95,11 @@ static const char *filemanager[2]    = {"thunar", NULL };
 static const Key keys[] =
 {
 /*  Action                 modifier                 key                     function            argument */
+    /* debugging */
     { XCBKeyPress,         SUPER,                   XK_n,                   UserStats,          {0} },
+    { XCBKeyPress,         SUPER|ALT,               XK_n,                   UserStatsCallStack, {0} },
+
+    /* actual stuff */
     { XCBKeyPress,         SUPER,                   XK_d,                   SpawnWindow,        {.v = dmenucmd } },
     { XCBKeyPress,         SUPER,                   RETURN,                 SpawnWindow,        {.v = termcmd } },
     { XCBKeyPress,         SUPER,                   XK_e,                   SpawnWindow,        {.v = filemanager } },
@@ -106,6 +110,7 @@ static const Key keys[] =
     { XCBKeyPress,         SUPER|SHIFT,             XK_p,                   Quit,               {0} },
     { XCBKeyPress,         SUPER|CTRL,              XK_p,                   RestartQ,           {0} },  /* UNSAFE sscanf() */
     { XCBKeyPress,         CTRL|ALT,                XK_p,                   Restart,            {0} },  /* UNSAFE sscanf() */
+    { XCBKeyPress,         SUPER|CTRL,              XK_z,                   StickWindow,        {0} },
     { XCBKeyPress,         SUPER,                   XK_z,                   SetWindowLayout,    {Tiled} },
     { XCBKeyPress,         SUPER,                   XK_x,                   SetWindowLayout,    {Floating} },
     { XCBKeyPress,         SUPER,                   XK_c,                   SetWindowLayout,    {Monocle} },
