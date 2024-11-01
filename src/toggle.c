@@ -147,6 +147,38 @@ UserStats(const Arg *arg)
 }
 
 void
+StickWindow(const Arg *arg)
+{
+    (void)arg;
+    Client *c = _wm.selmon->desksel->sel;
+    if(c)
+    {   
+        setsticky(c, !ISSTICKY(c));
+        arrange(c->desktop);
+    }
+}
+
+void
+UserStatsCallStack(const Arg *arg)
+{
+    char *stack = XCBDebugGetCallStack();
+    if(!stack)
+    {   return;
+    }
+    unsigned long long int i = 0;
+    while(stack[i] || stack[i + 1])
+    {   
+        if(stack[i])
+        {   putc(stack[i], stderr);
+        }
+        else
+        {   putc('\n', stderr);
+        }
+    }
+    free(stack);
+}
+
+void
 FocusMonitor(const Arg *arg)
 {
     Monitor *m;

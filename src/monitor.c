@@ -261,9 +261,12 @@ setdesktopsel(Monitor *mon, Desktop *desksel)
         }
         for(desk = mon->desktops; desk; desk = nextdesktop(desk))
         {
-            if(desk != desksel)
-            {
-                for(c = laststack(desk); c; c = prevstack(c))
+            for(c = laststack(desk); c; c = prevstack(c))
+            {   
+                if(ISSTICKY(c))
+                {   setclientdesktop(c, desksel);
+                }
+                if(desk != desksel)
                 {   showhide(c);
                 }
             }

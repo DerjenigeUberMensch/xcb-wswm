@@ -6,6 +6,10 @@
 
 /* Mostly a testing function */
 void UserStats(const Arg *arg);
+/* Makes a window sticky */
+void StickWindow(const Arg *arg);
+/* Mostly a testing function */
+void UserStatsCallStack(const Arg *arg);
 /* Switch to a monitor based on the argument int arg i */
 void FocusMonitor(const Arg *arg);
 /* Kills the current window */
