@@ -1452,33 +1452,39 @@ updatebarpos(Monitor *m)
         {   Debug0("Detected bar is a square suprisingly.");
         }
     }
+
+    i32 x;
+    i32 y;
+    i32 w;
+    i32 h;
+
+    /* default is top left side */
+    x = m->mx;
+    y = m->my;
+    w = bar->w;
+    h = bar->h;
+
     if(!ISHIDDEN(bar))
     {
         switch(side)
         {
             case BarSideLeft:
-                /* make sure its on the left side */
-                resize(bar, m->mx, m->my, bar->w, bar->h, 1);
                 m->wx += bar->w;
                 m->ww -= bar->w;
                 Debug0("Bar Placed Left.");
                 break;
             case BarSideRight:
-                /* make sure its on the right side */
-                resize(bar, m->mx + (m->mw - bar->w), m->my, bar->w, bar->h, 1);
+                x += m->mw - bar->w;
                 m->ww -= bar->w;
                 Debug0("Bar Placed Right.");
                 break;
             case BarSideTop:
-                /* make sure its on the top side */
-                resize(bar, m->mx, m->my, bar->w, bar->h, 1);
                 m->wy += bar->h;
                 m->wh -= bar->h;
                 Debug0("Bar Placed Top.");
                 break;
             case BarSideBottom:
-                /* make sure its on the bottom side */
-                resize(bar, m->mx, m->my + (m->mh - bar->h), bar->w, bar->h, 1);
+                y += m->mh - bar->h;
                 m->wh -= bar->h;
                 Debug0("Bar Placed Bottom.");
                 break;
@@ -1491,25 +1497,25 @@ updatebarpos(Monitor *m)
         switch(side)
         {
             case BarSideLeft:
-                bar->x = -bar->w;
+                x = -bar->w;
                 break;
             case BarSideRight:
-                bar->x = m->mw + bar->w;
+                x = m->mw;
                 break;
             case BarSideTop:
-                bar->y = -bar->h;
+                y = -bar->h;
                 break;
             case BarSideBottom:
-                bar->y = m->mh + bar->h;
+                y = m->mh;
                 break;
             default:
                 /* just warp offscreen */
-                bar->x = m->mw;
-                bar->y = m->mh;
+                x = m->mw;
+                y = m->mh;
                 break;
         }
     }
-    resize(bar, bar->x, bar->y, bar->w, bar->h, 1);
+    resize(bar, x, y, w, h, 1);
 }
 
 void
@@ -1530,8 +1536,13 @@ updatebargeom(Monitor *m)
     f32 bhr;
     enum BarSides side = GETBARSIDE(m, bar, 0);
     enum BarSides prev = GETBARSIDE(m, bar, 1);
+
     if(prev != side)
     {
+        i32 x;
+        i32 y;
+        i32 w;
+        i32 h;
         switch(side)
         {   
             case BarSideLeft:
@@ -1539,30 +1550,31 @@ updatebargeom(Monitor *m)
                 byr = _cfg.ly;
                 bwr = _cfg.lw;
                 bhr = _cfg.lh;
-                resize(bar, m->mx + (m->mw * bxr), m->my + (m->mh * byr), m->mw * bwr, m->mh * bhr, 1);
                 break;
             case BarSideRight:
                 bxr = _cfg.rx;
                 byr = _cfg.ry;
                 bwr = _cfg.rw;
                 bhr = _cfg.rh;
-                resize(bar, m->mx + (m->mw * bxr), m->my + (m->mh * byr), m->mw * bwr, m->mh * bhr, 1);
                 break;
             case BarSideTop:
                 bxr = _cfg.tx;
                 byr = _cfg.ty;
                 bwr = _cfg.tw;
                 bhr = _cfg.th;
-                resize(bar, m->mx + (m->mw * bxr), m->my + (m->mh * byr), m->mw * bwr, m->mh * bhr, 1);
                 break;
             case BarSideBottom:
                 bxr = _cfg.bx;
                 byr = _cfg.by;
                 bwr = _cfg.bw;
                 bhr = _cfg.bh;
-                resize(bar, m->mx + (m->mw * bxr), m->my + (m->mh * byr), m->mw * bwr, m->mh * bhr, 1);
                 break;
         }
+        x = m->mx + (m->mw * bxr);
+        y = m->my + (m->mh * byr);
+        w = m->mw * bwr;
+        h = m->mh * bhr;
+        resize(bar, x, y, w, h, 1);
     }
     else
     {
