@@ -40,9 +40,10 @@ ARCH64 = -march=x86-64
 ARCH = ${ARCH64} ${ARCHALL}
 # General compiler flags
 COMPILE_FLAGS = ${CCFLAGS} ${PRELINKERFLAGS} ${ARCH} 
-COMPILE_FLAGS += -DXINERAMA -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -DVERSION=\"${VERSION}\" -DMARK=\"${MARK}\"
+COMPILE_FLAGS += -DXINERAMA -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -DNDEBUG -DVERSION=\"${VERSION}\" -DMARK=\"${MARK}\"
 # Additional release-specific flags
-RCOMPILE_FLAGS = -DNDEBUG ${RELEASES}
+RCOMPILE_FLAGS = ${RELEASES}
+SCOMPILE_FLAGS = ${SIZEONLY}
 # Additional debug-specific flags
 DCOMPILE_FLAGS = -DDEBUG -DENABLE_DEBUG -DXCB_TRL_ENABLE_DEBUG ${DEBUG} 
 # Add additional include paths
@@ -101,12 +102,18 @@ release: export CFLAGS := $(CFLAGS) $(COMPILE_FLAGS) $(RCOMPILE_FLAGS)
 release: export LDFLAGS := $(LDFLAGS) $(LINK_FLAGS) $(RLINK_FLAGS)
 debug: export CFLAGS := $(CFLAGS) $(COMPILE_FLAGS) $(DCOMPILE_FLAGS)
 debug: export LDFLAGS := $(LDFLAGS) $(LINK_FLAGS) $(DLINK_FLAGS)
+size: export CFLAGS := $(CFLAGS) $(COMPILE_FLAGS) $(SCOMPILE_FLAGS)
+size: export LDFLAGS := $(LDFLAGS) $(LINK_FLAGS) $(RLINK_FLAGS)
+
 
 # Build and output paths
 release: export BUILD_PATH := build/release
 release: export BIN_PATH := bin/release
 debug: export BUILD_PATH := build/debug
 debug: export BIN_PATH := bin/debug
+size: export BUILD_PATH := build/size
+size:export BIN_PATH := bin/size
+
 install: export BIN_PATH := bin/release
 
 # Find all source files in the source directory, sorted by most
@@ -184,6 +191,19 @@ endif
 	@$(MAKE) all --no-print-directory
 	@echo -n "Total build time: "
 	@$(END_TIME)
+
+.PHONY: size
+size: dirs
+ifeq ($(USE_VERSION), true)
+	@echo "Beginning size build v$(VERSION_STRING)"
+else
+	@echo "Beginning size build"
+endif
+	@$(START_TIME)
+	@$(MAKE) all --no-print-directory
+	@echo -n "Total build time: "
+	@$(END_TIME)
+
 
 # Debug build for gdb debugging
 .PHONY: debug
