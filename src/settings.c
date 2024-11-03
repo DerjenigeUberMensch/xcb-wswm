@@ -243,9 +243,16 @@ USSave(
     }
 
     if(!FFFileExists(__CONFIG__PATH__))
-    {   
-        Debug0("No file found, writing base config...");
-        SCParserWrite(cfg, __CONFIG__PATH__);
+    {
+        status = FFCreateFile(__CONFIG__PATH__);
+        if(status == EXIT_FAILURE)
+        {   Debug0("Failed to create file, unable to write base config.");
+        }
+        else
+        {
+            Debug0("No file found, writing base config...");
+            SCParserWrite(cfg, __CONFIG__PATH__);
+        }
     }
     else if(FFIsFileEmpty(__CONFIG__PATH__))
     {
