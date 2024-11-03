@@ -1,6 +1,33 @@
+/* MIT License
+ *
+ * Copyright (c) 2024 Joseph
+ * All rights reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 #ifndef __FILE__UTIL__H
 #define __FILE__UTIL__H
 
+
+#ifndef __linux__
+#error "OS not supported functions may have undefined behaviour. "
+#endif
 
 
 
@@ -39,38 +66,37 @@ FFGetSysConfigPath(
  */
 int
 FFDirExists(
-        const char *const DIR_NAME
+        char *const DIR_NAME
         );
 
 
 /* Creates a directory based on path.
  *
- * ex: 
- *      FFCreateDir("home/user/.hidden_dir");
+ * Ex: 
+ *      FFCreateDir("/home/user/.hidden_dir/other_dir/last_dir");
  * 
- * NOTE: Sets errno on failure.
- *
  * RETURN: EXIT_SUCCESS on Success.
  * RETURN: EXIT_FAILURE on Failure.
  */
 int
 FFCreateDir(
-        const char *const DIR_NAME
+        char *const DIR_NAME
         );
 
-/* Creates a path based on FULL_PATH.
+/* Creates a file and specified subdirectories if necessary.
  *
- * ex: 
- *      FFCreatePath("home/user/.hidden_dir");
+ * NOTE: ~ and ~/ are not supported /home/<user>/ must be used for FILE_NAME assuming home directory is meant.
  * 
- * NOTE: Sets errno on failure.
+ * EX:
+ *      FFCreateFile("/home/john/.config/johns_config_directory/johns_config_file.cfg");
+ *
  *
  * RETURN: EXIT_SUCCESS on Success.
  * RETURN: EXIT_FAILURE on Failure.
  */
 int
 FFCreatePath(
-        const char *const FULL_PATH
+        char *const FULL_PATH
         );
 
 /*
@@ -79,7 +105,7 @@ FFCreatePath(
  */
 int
 FFPathExists(
-        const char *const FULL_PATH
+        char *const FULL_PATH
         );
 
 /*
@@ -88,25 +114,34 @@ FFPathExists(
  */
 int
 FFFileExists(
-        const char *const FILE_NAME
+        char *const FILE_NAME
         );
 
-/*
+/* Creates a file and specified subdirectories if necessary.
+ *
+ * NOTE: ~ and ~/ are not supported /home/<user>/ must be used for FILE_NAME assuming home directory is meant.
+ * 
+ * EX:
+ *      FFCreateFile("/home/john/.config/johns_config_directory/johns_config_file.cfg");
+ *
  * RETURN: EXIT_SUCCESS on Success.
  * RETURN: EXIT_FAILURE on Failure.
  */
 int
 FFCreateFile(
-        const char *const FILE_NAME
+        char *const FILE_NAME
         );
 
-/*
+/* Checks if a file is empty.
+ *
+ * NOTE: No safeguards if FILE_NAME is NULL.
+ *
  * RETURN: 1 on File is Empty.
  * RETURN: 0 on File is not Empty.
  */
 int
 FFIsFileEmpty(
-        const char *const FILE_NAME
+        char *const FILE_NAME
         );
 
 
