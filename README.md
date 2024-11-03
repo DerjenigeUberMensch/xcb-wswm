@@ -41,7 +41,7 @@ This build is ***not*** fully feature ready.
 
 **Pacman && yay**
 ```
-sudo pacman -S --needed dmenu xorg xorg-xinit libxcb xcb-util xcb-util-errors xcb-util-cursor xcb-util-image xcb-util-keysyms xcb-util-wm && yay -S st
+sudo pacman -S --needed dmenu xorg xorg-xinit libxcb xcb-util xcb-util-errors xcb-util-cursor xcb-util-image xcb-util-keysyms xcb-util-wm xcb-util-xrm && yay -S st
 ```
 
 ## Usage 
