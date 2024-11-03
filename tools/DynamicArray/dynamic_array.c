@@ -163,8 +163,8 @@ GArrayPopBack(
     if(array->data)
     {   
         /* make sure no underflow */
-        if(array->item_size)
-        {   GArrayResize(array, array->item_size - 1);
+        if(array->data_len)
+        {   GArrayResize(array, array->data_len - 1);
         }
     }
     return EXIT_SUCCESS;
