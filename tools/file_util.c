@@ -1,5 +1,29 @@
+/* MIT License
+ *
+ * Copyright (c) 2024 Joseph
+ * All rights reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <sys/stat.h>
 #include <errno.h>
@@ -7,13 +31,6 @@
 #include "file_util.h"
 
 
-/* 
- *
- * NOTE: Recomended buff length atleast 2550 bytes
- *
- * RETURN: EXIT_SUCCESS on Success.
- * RETURN: EXIT_FAILURE on Failure.
- */
 int
 FFGetSysConfigPath(
         char *buff,
@@ -47,13 +64,9 @@ FFGetSysConfigPath(
     return EXIT_FAILURE;
 }
 
-/*
- * RETURN: EXIT_SUCCESS on Success.
- * RETURN: EXIT_FAILURE on Failure.
- */
 int
 FFDirExists(
-        const char *const DIR_NAME
+        char *const DIR_NAME
         )
 {
     if(!DIR_NAME)
@@ -65,51 +78,108 @@ FFDirExists(
 
     statstatus = stat(DIR_NAME, &st);
 
-    const int EXISTS = statstatus != NOT_FOUND;
+    const int EXISTS = statstatus != NOT_FOUND && S_ISDIR(st.st_mode);
+    
 
     return EXISTS;
 }
 
 
-/* Creates a directory based on path.
- *
- * ex: 
- *      FFCreateDir("home/user/.hidden_dir");
- * 
- * NOTE: Sets errno on failure.
- *
- * RETURN: EXIT_SUCCESS on Success.
- * RETURN: EXIT_FAILURE on Failure.
- */
-int
+int 
 FFCreateDir(
-        const char *const DIR_NAME
+        char *const DIR_NAME
         )
 {
     if(!DIR_NAME)
     {   return EXIT_FAILURE;
     }
-    if(!FFDirExists(DIR_NAME))
-    {
-        int mkdirstatus = mkdir(DIR_NAME, 0777);
-        if(mkdirstatus && errno != EEXIST)
-        {   return EXIT_FAILURE;
+    unsigned long long int i = 0;
+    unsigned long long int base = 0;
+
+    enum { DIR_CHAR = '/' };
+
+    char replaced_char;
+    while(DIR_NAME[i])
+    {   
+        replaced_char = DIR_NAME[i];
+        if(DIR_NAME[i] == DIR_CHAR)
+        {   DIR_NAME[i] = '\0';
         }
+        if(*DIR_NAME && *DIR_NAME != ' ' && !FFDirExists(DIR_NAME + base))   
+        {
+            int mkdirstatus = mkdir(DIR_NAME, 0777);
+            if(mkdirstatus && errno != EEXIST)
+            {   
+                /* make sure data is not mutated */
+                DIR_NAME[i] = replaced_char;
+                return EXIT_FAILURE;
+            }
+        }
+        DIR_NAME[i] = replaced_char;
+        ++i;
+        if(!DIR_NAME[i])
+        {   break;
+        }
+        while(DIR_NAME[i] && DIR_NAME[i++] != DIR_CHAR);
+        --i;
     }
+
     return EXIT_SUCCESS;
 }
 
 int
 FFCreatePath(
-        const char *const FULL_PATH
+        char *const FULL_PATH
         )
 {
-    return FFCreateDir(FULL_PATH);
+    if(!FULL_PATH)
+    {   return EXIT_FAILURE;
+    }
+    unsigned long long int len = strlen(FULL_PATH);
+    unsigned long long int file_index = 0;
+    int ret = 0;
+
+    enum { DIR_CHAR = '/' };
+
+    while(len)
+    {
+        if(FULL_PATH[len] == DIR_CHAR)
+        {   
+            file_index = len;
+            break;
+        }
+        --len;
+    }
+
+    char old_char;
+
+    if(len)
+    {   
+        old_char = FULL_PATH[file_index];
+        FULL_PATH[file_index] = '\0';
+    }
+
+    FFCreateDir(FULL_PATH);
+
+    if(len)
+    {   FULL_PATH[file_index] = old_char;
+    }
+
+    if(!FFPathExists(FULL_PATH))
+    {
+        FILE *f = fopen(FULL_PATH, "ab+");
+        if(!f)
+        {   ret = EXIT_FAILURE;
+        }
+        fclose(f);
+    }
+
+    return ret;
 }
 
 int
 FFPathExists(
-        const char *const FULL_PATH
+        char *const FULL_PATH
         )
 {
     return FFDirExists(FULL_PATH);
@@ -117,32 +187,21 @@ FFPathExists(
 
 int
 FFFileExists(
-        const char *const FILE_NAME
+        char *const FILE_NAME
         )
 {   return FFPathExists(FILE_NAME);
 }
 
 int
 FFCreateFile(
-        const char *const FILE_NAME
+        char *const FILE_NAME
         )
-{
-    int ret = EXIT_SUCCESS;
-
-    if(!FFPathExists(FILE_NAME))
-    {
-        FILE *f = fopen(FILE_NAME, "ab+");
-        if(!f)
-        {   ret = EXIT_FAILURE;
-        }
-        fclose(f);
-    }
-    return ret;
+{   return FFCreatePath(FILE_NAME);
 }
 
 int
 FFIsFileEmpty(
-        const char *const FILE_NAME
+        char *const FILE_NAME
         )
 {
     int ret = 0;
