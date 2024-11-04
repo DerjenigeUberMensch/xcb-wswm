@@ -26,6 +26,7 @@ This build is ***not*** fully feature ready.
 - **XCB**
 
 ## Requirements
+### Base (Required)
 - **dmenu**
 - **st**
 - **xorg**
@@ -39,10 +40,19 @@ This build is ***not*** fully feature ready.
 - **xcb-util-keysyms**
 - **xcb-util-wm**
 - **xcb-util-xrm**
+### Multi Media Key Support. (Optional)
+- **PulseAudio**
+- **Playerctl**
+- **Brightnessctl**
 
-**Pacman && yay**
+## Pacman && yay
+### Base (Required)
 ```
 sudo pacman -S --needed dmenu xorg xorg-xinit libxcb xcb-util xcb-util-errors xcb-util-cursor xcb-util-image xcb-util-keysyms xcb-util-wm xcb-util-xrm && yay -S st
+```
+### Multi Media (Optional)
+```
+sudo pacman -S --needed pipewire-pulse pulseaudio playerctl brightnessctl
 ```
 
 ## Usage 
@@ -105,10 +115,16 @@ sudo make uninstall
 
 ## Configuration
 
-****Currently Configuration is not supported in this version of vox-wm****
+****Currently Configuration is not (GUI/conf file) supported in this version of vox-wm****
+### However...
+If you know a bit of C you can change dmenu colours and some keybinds under the directory vox-wm/include/keybinds.h
+### However...
+There is limited config file support under ~/.config/vox-wm/settings.cfg
+
+Do note that these changes only apply after a hard restart or killing and running the window manager again.
 
 ## Mousebinds
-These are the default mousebinds currently used within vox-wm, they are not planned to change (defaults), but will be when or if a configuration is implemented (NOT YET SUPPORTED)
+These are the default mousebinds currently used within vox-wm, they are not planned to change (defaults), but will be when or if a configuration is implemented.
 
 - RMB: Right Mouse Button.
 - LMB: Left Mouse Button.
@@ -121,7 +137,7 @@ These are the default mousebinds currently used within vox-wm, they are not plan
 | SUPER+LMB | Activates Window Moving of the Clicked Window. (Must be Held) |
 
 ## Keybinds
-These are the default keybinds currently used within vox-wm, they are not currently planned to change, but will be when or if a configuration is implemented (NOT YET SUPPORTED)
+These are the default keybinds currently used within vox-wm, they are not currently planned to change, but will be when or if a configuration is implemented.
 
 - SUPER: The "Windows" key (next to fn/ctrl, usually the left side of the keyboard).
 - RETURN: The Enter key (Right above right SHIFT, Not the numlock Enter key)
