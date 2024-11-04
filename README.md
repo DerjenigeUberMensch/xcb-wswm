@@ -38,6 +38,7 @@ This build is ***not*** fully feature ready.
 - **xcb-util-image**
 - **xcb-util-keysyms**
 - **xcb-util-wm**
+- **xcb-util-xrm**
 
 **Pacman && yay**
 ```
