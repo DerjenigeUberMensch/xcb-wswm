@@ -60,7 +60,8 @@ FFGetSysConfigPath(
         unsigned int *len_return
         );
 
-/*
+/* Directory checking checks if the specified directory exists. 
+ *
  * RETURN: EXIT_SUCCESS on Success.
  * RETURN: EXIT_FAILURE on Failure.
  */
@@ -99,7 +100,8 @@ FFCreatePath(
         char *const FULL_PATH
         );
 
-/*
+/* Path checking simply checks if the specified path exists, this does not care if its a directory or regular file.
+ *
  * RETURN: 1 on Path Exists.
  * RETURN: 0 on Path Doesnt Exists.
  */
@@ -108,7 +110,8 @@ FFPathExists(
         char *const FULL_PATH
         );
 
-/*
+/* File checking checks if it exists via the specified path.
+ *
  * RETURN: 1 on File Exists.
  * RETURN: 0 on File Doesnt Exists.
  */

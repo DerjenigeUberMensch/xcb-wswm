@@ -78,12 +78,11 @@ FFDirExists(
 
     statstatus = stat(DIR_NAME, &st);
 
-    const int EXISTS = statstatus != NOT_FOUND && S_ISDIR(st.st_mode);
-    
+    const int FOUND = statstatus != NOT_FOUND;
+    const int IS_DIRECTORY = S_ISDIR(st.st_mode);
 
-    return EXISTS;
+    return FOUND && IS_DIRECTORY;
 }
-
 
 int 
 FFCreateDir(
@@ -165,7 +164,7 @@ FFCreatePath(
     {   FULL_PATH[file_index] = old_char;
     }
 
-    if(!FFPathExists(FULL_PATH))
+    if(!FFFileExists(FULL_PATH))
     {
         FILE *f = fopen(FULL_PATH, "ab+");
         if(!f)
@@ -182,14 +181,38 @@ FFPathExists(
         char *const FULL_PATH
         )
 {
-    return FFDirExists(FULL_PATH);
+    if(!FULL_PATH)
+    {   return EXIT_FAILURE;
+    }
+    const int NOT_FOUND = -1;
+    int statstatus = 0; 
+    struct stat st = {0};
+
+    statstatus = stat(FULL_PATH, &st);
+
+    const int FOUND = statstatus != NOT_FOUND;
+
+    return FOUND;
 }
 
 int
 FFFileExists(
         char *const FILE_NAME
         )
-{   return FFPathExists(FILE_NAME);
+{   
+    if(!FILE_NAME)
+    {   return EXIT_FAILURE;
+    }
+    const int NOT_FOUND = -1;
+    int statstatus = 0; 
+    struct stat st = {0};
+
+    statstatus = stat(FILE_NAME, &st);
+
+    const int FOUND = statstatus != NOT_FOUND;
+    const int IS_FILE = S_ISREG(st.st_mode);
+
+    return FOUND && IS_FILE;
 }
 
 int
@@ -206,7 +229,7 @@ FFIsFileEmpty(
 {
     int ret = 0;
 
-    if(FFPathExists(FILE_NAME))
+    if(FFFileExists(FILE_NAME))
     {
         FILE *fr = fopen(FILE_NAME, "r");
         if(fr)
