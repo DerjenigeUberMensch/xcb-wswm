@@ -739,6 +739,28 @@ u32 DOCKEDINITIAL(Client *c)    {   Monitor *m = c->desktop->mon;
                                         ;
                                 }
 
+u32 SHOULDMANAGE(const XCBWindow window) 
+                                {
+                                    Client *c = wintoclient(window);
+                                    XCBWindow already_managed_window = c ? c->win : 0;
+                                    const XCBWindow INVALID_WINDOW[] = 
+                                    {
+                                        XCB_NONE,
+                                        _wm.root,
+                                        _wm.wmcheckwin,
+                                        already_managed_window,
+                                    };
+
+                                    int i;
+                                    for(i = 0; i < LENGTH(INVALID_WINDOW); ++i)
+                                    {
+                                        if(window == INVALID_WINDOW[i])
+                                        {   return 0;
+                                        }
+                                    }
+
+                                    return 1;
+                                }
 u32 ISFIXED(Client *c)          { return (c->minw != 0) && (c->minh != 0) && (c->minw == c->maxw) && (c->minh == c->maxh); }
 u32 ISURGENT(Client *c)         { return c->ewmhflags & WStateFlagDemandAttention; }
 /* flag */
@@ -1483,14 +1505,11 @@ manage(XCBWindow win, void *replies[ManageClientLAST])
     Monitor *m = NULL;
     Client *c = NULL;
     /* checks */
-    if(win == _wm.root)
-    {   Debug("%s", "Cannot manage() root window.");
+    if(!SHOULDMANAGE(win))
+    {   
+        Debug("Cannot manage(): [%u]", win);
         goto FAILURE;
     }
-    else if(wintoclient(win))
-    {   Debug("Window already managed????: [%u]", win);
-        goto FAILURE;
-    } 
     
     const u16 bw = 0;
     const u32 bcol = 0;
