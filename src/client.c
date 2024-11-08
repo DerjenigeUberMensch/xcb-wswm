@@ -761,6 +761,12 @@ u32 SHOULDMANAGE(const XCBWindow window)
 
                                     return 1;
                                 }
+Client *REMOVECLIENTREFERENCES(Client *c)
+                                {
+                                    detachcompletely(c);
+                                    delclienthash(c);
+                                    return c;
+                                }
 u32 ISFIXED(Client *c)          { return (c->minw != 0) && (c->minh != 0) && (c->minw == c->maxw) && (c->minh == c->maxh); }
 u32 ISURGENT(Client *c)         { return c->ewmhflags & WStateFlagDemandAttention; }
 /* flag */

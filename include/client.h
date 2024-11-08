@@ -572,6 +572,7 @@ uint32_t WASDOCKEDVERT(Client *c);
 uint32_t WASDOCKEDHORZ(Client *c);
 uint32_t WASDOCKED(Client *c);
 uint32_t SHOULDMANAGE(const XCBWindow window);
+Client *REMOVECLIENTREFERENCES(Client *c);
 uint32_t ISFIXED(Client *c);
 uint32_t ISURGENT(Client *c);
 /* flag */
