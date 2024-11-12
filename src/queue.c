@@ -26,6 +26,7 @@ CQueueUnlockW(CQueue *q)
 {   return pthread_rwlock_unlock(&q->mutex);
 }
 
+/*
 static inline const int
 __CQueue_Index_Exists(CQueue *q, const int64_t index)
 {
@@ -39,6 +40,8 @@ __CQueue_Index_Exists(CQueue *q, const int64_t index)
 
     return (!!nowrap * _nowrap_ret) + (wrap * _wrap_ret);
 }
+
+*/
 
 uint8_t
 __CQueue_full_no_lock(CQueue *queue)

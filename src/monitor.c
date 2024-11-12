@@ -188,6 +188,12 @@ recttomon(i16 x, i16 y, u16 w, u16 h)
 	return r;
 }
 
+Monitor *
+nextmonitor(Monitor *m)
+{
+    return m ? m->next : m;
+}
+
 void 
 setdesktopcount(Monitor *m, uint16_t desktops)
 {

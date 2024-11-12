@@ -836,9 +836,6 @@ u32 HASWMDELETEWINDOW(Client *c){ return c->ewmhflags & WStateFlagWMDeleteWindow
 void
 applygravity(const enum XCBBitGravity gravity, int32_t *x, int32_t *y, const uint32_t w, const uint32_t h, const uint32_t bw)
 {
-    if(!x || !y)
-    {   return;
-    }
     /* im a dumbass */
     switch(gravity)
     {
@@ -1289,9 +1286,6 @@ grabkeys(void)
 void 
 killclient(Client *c, enum KillType type)
 {
-    if(!c)
-    {   return;
-    }
     if(HASWMSAVEYOURSELF(c))
     {   sendprotocolevent(c, wmatom[WMSaveYourself]);
     }
@@ -2244,9 +2238,6 @@ startrstack(Desktop *desk)
 void
 unfocus(Client *c, uint8_t setfocus)
 {
-    if(!c)   
-    {   return;
-    }
     grabbuttons(c, 0);
     XCBSetWindowBorder(_wm.dpy, c->win, c->bcol);
     setclientnetstate(c, netatom[NetWMStateFocused], 0);
@@ -2284,13 +2275,9 @@ updateborderwidth(Client *c)
     XCBSetWindowBorderWidth(_wm.dpy, c->win, c->bw);
 }
 
-
 void
 unmanage(Client *c, uint8_t destroyed)
 {
-    if(!c)
-    {   return;
-    }
     const XCBWindow win = c->win;
 
     /* prevent dangling pointer here woops */
@@ -2397,16 +2384,13 @@ updateclass(Client *c, XCBWMClass *_class)
 void
 updatecolormap(Client *c, XCBColormap colormap)
 {
-    if(c)
-    {
-        if(c->colormap)
-        {   XCBUninstallColormap(_wm.dpy, c->colormap);
-        }
-        if(colormap)
-        {   XCBInstallColormap(_wm.dpy, colormap);
-        }
-        c->colormap = colormap;
+    if(c->colormap)
+    {   XCBUninstallColormap(_wm.dpy, c->colormap);
     }
+    if(colormap)
+    {   XCBInstallColormap(_wm.dpy, colormap);
+    }
+    c->colormap = colormap;
 }
 
 static void 
@@ -2751,7 +2735,7 @@ updatewindowprotocol(Client *c, XCBWMProtocols *protocols)
 void
 updatewindowstate(Client *c, XCBAtom state, uint8_t add_remove_toggle)
 {
-    if(!c || !state)
+    if(!state)
     {   return;
     }
     const u8 toggle = add_remove_toggle == 2;
@@ -2915,7 +2899,7 @@ updatewindowstate(Client *c, XCBAtom state, uint8_t add_remove_toggle)
 void
 updatewindowstates(Client *c, XCBAtom states[], uint32_t atomslength)
 {
-    if(!states || !c)
+    if(!states)
     {   return;
     }
 
@@ -2938,7 +2922,7 @@ updatewindowstates(Client *c, XCBAtom states[], uint32_t atomslength)
 void
 updatewindowtype(Client *c, XCBAtom wtype, uint8_t add_remove_toggle)
 {
-    if(!c || !wtype)
+    if(!wtype)
     {   return;
     }
 
@@ -3087,7 +3071,7 @@ updatewindowtype(Client *c, XCBAtom wtype, uint8_t add_remove_toggle)
 void
 updatewindowtypes(Client *c, XCBAtom wtypes[], uint32_t atomslength)
 {
-    if(!wtypes || !c)
+    if(!wtypes)
     {   return;
     }
     /* bullshit client is trying to mess with us */
