@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "desktop.h"
+#include "util.h"
 
 /* cursor */
 enum CurType 
@@ -46,22 +47,22 @@ struct Monitor
 
 /* Arranges and restacks all the windows for every deskop in the specified monitor.
 */
-void arrangemon(Monitor *m);
+void NonNull arrangemon(Monitor *m);
 /* Arrange and restacks every window on all monitors.
 */
 void arrangemons(void);
 /* Adds desktop to specified monitor linked list.
 */
-void attachdesktop(Monitor *m, Desktop *desk);
+void NonNullAll attachdesktop(Monitor *m, Desktop *desk);
 /* Removes desktop fromt specified monitor linked list.
 */
-void detachdesktop(Monitor *m, Desktop *desk);
+void NonNullAll detachdesktop(Monitor *m, Desktop *desk);
 /* Frees allocated cursors.
  */
 void cleanupcursors(void);
 /* Frees Monitor and allocated Monitor properties.
 */
-void cleanupmon(Monitor *m);
+void NonNull cleanupmon(Monitor *m);
 /* Frees all monitors and allocated Monitor properties.
 */
 void cleanupmons(void);
@@ -79,11 +80,11 @@ Monitor *dirtomon(uint8_t dir);
  * RETURN: Monitor* on Success.
  * RETURN: NULL on Failure.
  */
-Monitor *nextmonitor(Monitor *monitor);
+Monitor *FuncNullable nextmonitor(Monitor *monitor);
 /* Sets the desktop count rolling back any clients to previous desktops. */
-void setdesktopcount(Monitor *m, uint16_t desktops);
+void NonNull setdesktopcount(Monitor *m, uint16_t desktops);
 /* Sets the currently selected desktop */
-void setdesktopsel(Monitor *mon, Desktop *desksel);
+void NonNullAll setdesktopsel(Monitor *mon, Desktop *desksel);
 /* Sets up the cursors used for the WM. */
 void setupcursors(void);
 /* Updates 

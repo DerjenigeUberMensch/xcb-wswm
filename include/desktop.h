@@ -43,50 +43,50 @@ struct Layout
 
 
 /* quickly calculate arrange stuff */
-void arrangeq(Desktop *desk);
+void NonNull arrangeq(Desktop *desk);
 /* Arranges and restacks the windows in the specified desktop.
 */
-void arrange(Desktop *desk);
+void NonNull arrange(Desktop *desk);
 /* Arranges the windows in the specified desktop.
  *
  * NOTE: Does not restack windows.
  */
-void arrangedesktop(Desktop *desk);
+void NonNull arrangedesktop(Desktop *desk);
 /* Adds Client to clients desktop linked list.
 */
-void attach(Client *c);
+void NonNull attach(Client *c);
 /* Adds Client to rendering stack order in desktop linked list.
 */
-void attachstack(Client *c);
+void NonNull attachstack(Client *c);
 /* Adds Client to previous rendering stack order.
  */
-void attachrestack(Client *c);
+void NonNull attachrestack(Client *c);
 /* Adds Client to focus linked list. 
  */
-void attachfocus(Client *c);
+void NonNull attachfocus(Client *c);
 /* Adds Client to focus linked list after specified "start" Client */
-void attachfocusafter(Client *start, Client *after);
+void NonNull attachfocusafter(Client *start, Client *after);
 /* Adds Client to focus linked list before specified "start" Client */
-void attachfocusbefore(Client *start, Client *after);
+void NonNull attachfocusbefore(Client *start, Client *after);
 /* Removes Client from clients desktop linked list.
 */
-void detach(Client *c);
+void NonNull detach(Client *c);
 /* Removes all connections from clients desktop linked list
  * Analagous to detachstack(c) and detach(c);
 */
-void detachcompletely(Client *c);
+void NonNull detachcompletely(Client *c);
 /* Removes Client from desktop rendering stack order.
 */
-void detachstack(Client *c);
+void NonNull detachstack(Client *c);
 /* Removes Client from previous restack order. (rstack);
  */
-void detachrestack(Client *c);
+void NonNull detachrestack(Client *c);
 /* Removes Client from desktop focus order.
 */
-void detachfocus(Client *c);
+void NonNull detachfocus(Client *c);
 /* Frees desktop and allocated desktop properties.
 */
-void cleanupdesktop(Desktop *desk);
+void NonNull cleanupdesktop(Desktop *desk);
 /* Allocates a desktop and desktop properties with all data set to 0 or to the adress of any newly allocated data.
  * RETURN: Desktop * on Success.
  * RETURN: NULL on Failure.
@@ -95,43 +95,43 @@ Desktop *createdesktop(void);
 /* Sets the "floating" layout for the specified desktop.
  * Floating -> Windows overlap each other AKA default win10 window behaviour.
  */
-void floating(Desktop *desk);
+void NonNull floating(Desktop *desk);
 /* Sets the "grid" layout for the specified desktop.
  * grid -> windows are sorted in a grid like formation, like those ones in hacker movies.
  */
-void grid(Desktop *desk);
+void NonNull grid(Desktop *desk);
 /* Sets the "monocle" layout for the specified desktop.
  * monocle -> Windows are maximized to the screen avaible area, 
  * while floating windows are always raised above all others.
  */
-void monocle(Desktop *desk);
+void NonNull monocle(Desktop *desk);
 /* Returns the next Desktop avaible.
  * RETURN: Desktop* on Success.
  * RETURN: NULL on Failure.
  */
-Desktop *nextdesktop(Desktop *desktop);
+Desktop *FuncNullable nextdesktop(Desktop *desktop);
 /* Returns the previous desktop avaible. 
  * RETURN: Desktop * on Success.
  * RETURN: NULL on Failure.
  */
-Desktop *prevdesktop(Desktop *desk);
+Desktop *FuncNullable prevdesktop(Desktop *desk);
 /* Reorders(restacks) clients in current desk->stack */
-void restack(Desktop *desk);
+void NonNull restack(Desktop *desk);
 /* "Restacks" clients on from linked list no effect unless restack called*/
-void reorder(Desktop *desk);
+void NonNull reorder(Desktop *desk);
 /* Sets the desktops layouts, (not automatic arrange must be called after to apply changes.) */
-void setdesktoplayout(Desktop *desk, uint8_t layout);
+void NonNull setdesktoplayout(Desktop *desk, uint8_t layout);
 /*      reference point is c1.
  *      so if c1 has higher priority return 1.
  *      RETURN: 1 on higher priority.
  *      RETURN: 0 on lesser priority.
  */
-int stackpriority(Client *c1, Client *c2);
+int NonNullAll stackpriority(Client *c1, Client *c2);
 /* Sets the "Tiled" layout for the specified desktop.
  * Tiled -> Windows tile in a grid like patter where there is 1 Big window to the left,
  *          and "stacking" on top of each other smaller windows on the right.
  */
-void tile(Desktop *desk);
+void NonNull tile(Desktop *desk);
 /* Updates the XServer to the Current destop */
 void updatedesktop(void);
 /* Updates the desktop names if they have changed */
@@ -139,7 +139,7 @@ void updatedesktopnames(void);
 /* Updates the current desktop count AKA how many desktops we got to the XServer */
 void updatedesktopnum(void);
 /* Updates focus order when before reorder() */
-void updatestackpriorityfocus(Desktop *desk);
+void NonNull updatestackpriorityfocus(Desktop *desk);
 /* updates the viewport property to the XServer */
 void updateviewport(void);
 
