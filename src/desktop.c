@@ -80,10 +80,6 @@ arrangedesktop(Desktop *desk)
 
 #define __detach_helper(NAME, TYPE, STRUCT, HEAD, NEXT, PREV, LAST)   do                                                        \
                                                                 {                                                               \
-                                                                    if(!STRUCT)                                                 \
-                                                                    {   Debug0("No " #TYPE " to detach, undefined FIXME");      \
-                                                                        return;                                                 \
-                                                                    }                                                           \
                                                                     TYPE **tc;                                                  \
                                                                     for(tc = &HEAD; *tc && *tc != STRUCT; tc = &(*tc)->NEXT);   \
                                                                     *tc = STRUCT->NEXT;                                         \
@@ -170,20 +166,17 @@ detach(Client *c)
 void
 detachcompletely(Client *c)
 {
-    if(c)
-    {   
-        Desktop *desk = c->desktop;
-        if(desk)
-        {
-            Monitor *m = desk->mon;
-            if(m->bar == c)
-            {   
-                m->bar = NULL;
-                Debug0("Detaching bar? Potential memory leak");
-            }
-            if(desk->sel == c)
-            {   desk->sel = NULL;
-            }
+    Desktop *desk = c->desktop;
+    if(desk)
+    {
+        Monitor *m = desk->mon;
+        if(m->bar == c)
+        {   
+            m->bar = NULL;
+            Debug0("Detaching bar? Potential memory leak");
+        }
+        if(desk->sel == c)
+        {   desk->sel = NULL;
         }
     }
     detach(c);
@@ -268,7 +261,7 @@ floating(Desktop *desk)
 void
 grid(Desktop *desk)
 {
-    const float bgwr = _cfg.gapratio;
+    const float bgwr = _cfg.GapRatio;
 
     i32 n, cols, rows, cn, rn, i, cx, cy, cw, ch;
     i32 nx, ny;
@@ -350,12 +343,6 @@ Desktop *
 nextdesktop(Desktop *desk)
 {
     return desk ? desk->next : desk;
-}
-
-Monitor *
-nextmonitor(Monitor *m)
-{
-    return m ? m->next : m;
 }
 
 Desktop *
@@ -534,9 +521,9 @@ stackpriority(Client *c1, Client *c2)
 void
 tile(Desktop *desk)
 {
-    const u16 nmaster = _cfg.mcount;
-    const float mfact = _cfg.mfact;
-    const float bgwr = _cfg.gapratio;
+    const u16 nmaster = _cfg.MCount;
+    const float mfact = _cfg.MFact;
+    const float bgwr = _cfg.GapRatio;
 
     i32 h, mw, my, ty;
     i32 n, i;

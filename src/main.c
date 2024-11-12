@@ -1546,28 +1546,28 @@ updatebargeom(Monitor *m)
         switch(side)
         {   
             case BarSideLeft:
-                bxr = _cfg.lx;
-                byr = _cfg.ly;
-                bwr = _cfg.lw;
-                bhr = _cfg.lh;
+                bxr = _cfg.BarLX;
+                byr = _cfg.BarLY;
+                bwr = _cfg.BarLW;
+                bhr = _cfg.BarLH;
                 break;
             case BarSideRight:
-                bxr = _cfg.rx;
-                byr = _cfg.ry;
-                bwr = _cfg.rw;
-                bhr = _cfg.rh;
+                bxr = _cfg.BarRX;
+                byr = _cfg.BarRY;
+                bwr = _cfg.BarRW;
+                bhr = _cfg.BarRH;
                 break;
             case BarSideTop:
-                bxr = _cfg.tx;
-                byr = _cfg.ty;
-                bwr = _cfg.tw;
-                bhr = _cfg.th;
+                bxr = _cfg.BarTX;
+                byr = _cfg.BarTY;
+                bwr = _cfg.BarTW;
+                bhr = _cfg.BarTH;
                 break;
             case BarSideBottom:
-                bxr = _cfg.bx;
-                byr = _cfg.by;
-                bwr = _cfg.bw;
-                bhr = _cfg.bh;
+                bxr = _cfg.BarBX;
+                byr = _cfg.BarBY;
+                bwr = _cfg.BarBW;
+                bhr = _cfg.BarBH;
                 break;
         }
         x = m->mx + (m->mw * bxr);
@@ -1581,28 +1581,28 @@ updatebargeom(Monitor *m)
         switch(side)
         {
             case BarSideLeft:
-                _cfg.lx = bar->x;
-                _cfg.ly = bar->y;
-                _cfg.lw = bar->w;
-                _cfg.lh = bar->h;
+                _cfg.BarLX = bar->x;
+                _cfg.BarLY = bar->y;
+                _cfg.BarLW = bar->w;
+                _cfg.BarLH = bar->h;
                 break;
             case BarSideRight:
-                _cfg.rx = bar->x;
-                _cfg.ry = bar->y;
-                _cfg.rw = bar->w;
-                _cfg.rh = bar->h;
+                _cfg.BarRX = bar->x;
+                _cfg.BarRY = bar->y;
+                _cfg.BarRW = bar->w;
+                _cfg.BarRH = bar->h;
                 break;
             case BarSideTop:
-                _cfg.tx = bar->x;
-                _cfg.ty = bar->y;
-                _cfg.tw = bar->w;
-                _cfg.th = bar->h;
+                _cfg.BarTX = bar->x;
+                _cfg.BarTY = bar->y;
+                _cfg.BarTW = bar->w;
+                _cfg.BarTH = bar->h;
                 break;
             case BarSideBottom:
-                _cfg.bx = bar->x;
-                _cfg.by = bar->y;
-                _cfg.bw = bar->w;
-                _cfg.bh = bar->h;
+                _cfg.BarBX = bar->x;
+                _cfg.BarBY = bar->y;
+                _cfg.BarBW = bar->w;
+                _cfg.BarBH = bar->h;
                 break;
         }
     }
@@ -1611,10 +1611,6 @@ updatebargeom(Monitor *m)
 void
 wakeupconnection(XCBDisplay *display, int screen)
 {
-    if(!display)
-    {   Debug0("No connection avaible");
-        return;
-    }
     XCBGenericEvent ev;
     XCBClientMessageEvent *cev = (XCBClientMessageEvent *)&ev;
     memset(&ev, 0, sizeof(XCBGenericEvent));
@@ -1633,7 +1629,7 @@ wakeupconnection(XCBDisplay *display, int screen)
 void
 xerror(XCBDisplay *display, XCBGenericError *err)
 {
-    if(err)
+    if(likely(err))
     {   
         Debug("%s %s\n", XCBGetErrorMajorCodeText(err->major_code), XCBGetFullErrorText(err->error_code));
         Debug("error_code: [%d], major_code: [%d], minor_code: [%d]\n"

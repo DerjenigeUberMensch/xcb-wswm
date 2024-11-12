@@ -320,7 +320,6 @@ DragWindow(
     running = 1;
     XCBMotionNotifyEvent *mev = NULL;
     XCBTimestamp lasttime = 0;
-    const float FRAME_TIME = 1000.0f / (_cfg.refreshrate + !_cfg.refreshrate);
     do
     {
         if(ev)
@@ -330,8 +329,9 @@ DragWindow(
             {
                 case XCB_MOTION_NOTIFY:
                     mev = (XCBMotionNotifyEvent *)ev;
-                    if(_cfg.refreshrate)
+                    if(_cfg.RefreshRate)
                     {
+                        const float FRAME_TIME = 1000.0f / (_cfg.RefreshRate + !_cfg.RefreshRate);
                         if((mev->time - lasttime) <= FRAME_TIME)
                         {   break;
                         }
@@ -340,13 +340,13 @@ DragWindow(
                     nx = oldx + mev->event_x - x;
                     ny = oldy + mev->event_y - y;
                     /* snap to window area */
-                    if (abs(_wm.selmon->wx - nx) < _cfg.snap)
+                    if (abs(_wm.selmon->wx - nx) < _cfg.Snap)
                         nx = _wm.selmon->wx;
-                    else if (abs((_wm.selmon->wx + _wm.selmon->ww) - (nx + oldw)) < _cfg.snap)
+                    else if (abs((_wm.selmon->wx + _wm.selmon->ww) - (nx + oldw)) < _cfg.Snap)
                         nx = _wm.selmon->wx + _wm.selmon->ww - oldw;
-                    if (abs(_wm.selmon->wy - ny) < _cfg.snap)
+                    if (abs(_wm.selmon->wy - ny) < _cfg.Snap)
                         ny = _wm.selmon->wy;
-                    else if (abs((_wm.selmon->wy + _wm.selmon->wh) - (ny + oldh)) < _cfg.snap)
+                    else if (abs((_wm.selmon->wy + _wm.selmon->wh) - (ny + oldh)) < _cfg.Snap)
                         ny = _wm.selmon->wy + _wm.selmon->wh - oldh;
 
                     if(c)
@@ -573,7 +573,6 @@ ResizeWindow(const Arg *arg)
     ev = NULL;
     XCBMotionNotifyEvent *mev = NULL;
     XCBTimestamp lasttime = 0;
-    const float FRAME_TIME = 1000.0f / (_cfg.refreshrate + !_cfg.refreshrate);
     do
     {
         if(ev)
@@ -583,8 +582,9 @@ ResizeWindow(const Arg *arg)
             {   
                 case XCB_MOTION_NOTIFY:
                     mev = (XCBMotionNotifyEvent *)ev;
-                    if(_cfg.refreshrate)
+                    if(_cfg.RefreshRate)
                     {
+                        const float FRAME_TIME = 1000.0f / (_cfg.RefreshRate + !_cfg.RefreshRate);
                         if((mev->time - lasttime) <= FRAME_TIME)
                         {   break;
                         }

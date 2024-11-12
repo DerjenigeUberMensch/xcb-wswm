@@ -34,13 +34,6 @@ sigquit(
 }
 
 static void
-sigterm(
-        int signo
-       )
-{
-}
-
-static void
 sigsegv(
         int signo
       )

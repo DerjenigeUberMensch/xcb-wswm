@@ -158,7 +158,7 @@ struct MotifWmHints
  * RETURN: 0 on Success.
  * RETURN: 1 on no new bar (Failure).
 */
-uint8_t checknewbar(Monitor *m, Client *c, const uint8_t has_strut_or_strut_partial);
+uint8_t NonNullAll checknewbar(Monitor *m, Client *c, const uint8_t has_strut_or_strut_partial);
 /* Inital startup check if there is another window manager running.
 */
 void checkotherwm(void);
@@ -167,12 +167,12 @@ void checkotherwm(void);
 void cleanup(void);
 /* Jumps to the specified function handler for the provided event.
 */
-void eventhandler(XCBGenericEvent *ev);
+void NonNull eventhandler(XCBGenericEvent *ev);
 /* handles atexit.
 */
 void exithandler(void);
 /* Gets the root ptr location if possible, */
-int8_t getrootptr(int16_t *x, int16_t *y);
+int8_t NonNullAll getrootptr(int16_t *x, int16_t *y);
 /* Sends a event to the main event loop to stop running.
  */
 void quit(void);
@@ -217,7 +217,7 @@ void setup(void);
 /* Sets up Atoms ID's from the XServer */
 void setupatoms(void);
 /* Sets up special data. */
-void setupbar(Monitor *m, Client *bar);
+void NonNullAll setupbar(Monitor *m, Client *bar);
 /* Loads CFG data into Settings struct. */
 void setupcfg(void);
 /* Sets up System related data */
@@ -241,12 +241,12 @@ void startup(void);
 /* Starts the wm basic process */
 void startupwm(void);
 /* updates the Status Bar Position from given monitor */
-void updatebarpos(Monitor *m);
+void NonNull updatebarpos(Monitor *m);
 /* updates the bar geometry from the given monitor */
-void updatebargeom(Monitor *m);
+void NonNull updatebargeom(Monitor *m);
 /* Wakups the current X connection by sending a event to it */
-void wakeupconnection(XCBDisplay *display, int screen);
+void NonNull wakeupconnection(XCBDisplay *display, int screen);
 /* Error handler */
-void xerror(XCBDisplay *display, XCBGenericError *error);
+void NonNullArg(1) xerror(XCBDisplay *display, XCBGenericError *error);
 
 #endif 

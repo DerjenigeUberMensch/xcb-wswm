@@ -1,9 +1,8 @@
 # compiler 
-CC = cc
+COMPILER ?= cc
 
 # paths
-PREFIX = /usr/local/
-MANPREFIX = ${PREFIX}/share/man
+PREFIX ?= /usr/local/
 
 # includes and libs
 # For more just do (GNU)
@@ -38,14 +37,10 @@ WARNINGFLAGS = ${WARNINGDEFAULT} ${WARNINGEXTRAS}
 
 LINKTIMEOPTIMIZATIONS = -flto -flto=auto
 
-ifeq ($(CC), clang)
-	LINKTIMEOPTIMIZATIONS = 
-endif
-
-PRELINKERFLAGS = -fstack-protector-strong -fstack-clash-protection -fpie ${LINKTIMEOPTIMIZATIONS} ${SECTIONCODE}
+PRELINKERFLAGS ?= -fstack-protector-strong -fstack-clash-protection -fpie ${LINKTIMEOPTIMIZATIONS} ${SECTIONCODE}
 
 # can set higher but function overhead is pretty small so meh
-INLINELIMIT = 15
+INLINELIMIT ?= 15
 # can conflict with adress sanatizer if used (clang)
 NO_SANATIZE_FLAGS =  -Wl,-z,relro
 

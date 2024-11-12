@@ -193,9 +193,11 @@ _xcb_jmpck(XCBDisplay *d, XCBGenericError *err)
 */
 
 
-static void _xcb_pop_func(XCBCookie cookie);
 static int _xcb_full_func(void);
 static int _xcb_empty_func(void);
+
+/*
+static void _xcb_pop_func(XCBCookie cookie);
 
 static void
 _xcb_pop_func(XCBCookie cookie)
@@ -217,6 +219,8 @@ _xcb_pop_func(XCBCookie cookie)
     {   front = (front + 1) % MAX_DEBUG_LIMIT;
     }
 }
+
+*/
 
 static int
 _xcb_full_func(void)

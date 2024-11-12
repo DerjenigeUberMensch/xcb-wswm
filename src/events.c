@@ -382,7 +382,7 @@ motionnotify(XCBGenericEvent *event)
 void
 enternotify(XCBGenericEvent *event)
 {
-    if(!_cfg.hoverfocus)
+    if(!_cfg.HoverFocus)
     {   return;
     }
     XCBEnterNotifyEvent *ev = (XCBEnterNotifyEvent *)event;

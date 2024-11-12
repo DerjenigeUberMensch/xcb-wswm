@@ -236,10 +236,6 @@ union ARGB
 #define __FUNC__ARG__ALLOC__SIZE__  __attribute__((alloc_size(1)));
 #endif
 
-#ifndef __cplusplus
-#define fallthrough __attribute__((fallthrough));
-#endif
-
 #ifndef __FUNC__NO__OTHER__CALL__
 #define __FUNC__NO__OTHER__CALL__ __attribute__((leaf));
 #endif
@@ -260,6 +256,10 @@ union ARGB
 #define _PRAGMA_ONCE_                   #pragma once
 #endif
 
+#ifndef __cplusplus
+#define fallthrough __attribute__((fallthrough));
+#endif
+
 #ifndef ASSUME
 #define ASSUME(cond) do { if (!(cond)) __builtin_unreachable(); } while (0)
 #endif
@@ -271,6 +271,31 @@ union ARGB
 #ifndef unlikely
 #define unlikely(X) __builtin_expect(!!(X), 0)
 #endif
+
+#ifndef NonNull
+#define NonNull __attribute__((nonnull(1)))
+#endif
+
+#ifndef NonNullArg
+#define NonNullArg(PTRS_NON_NULL_COUNT) __attribute__((nonnull(PTRS_NON_NULL_COUNT)))
+#endif
+
+#ifndef NonNullAll
+#define NonNullAll __attribute__((nonnull))
+#endif
+
+#ifndef FuncNullable
+#define FuncNullable
+#endif
+
+#ifndef FuncNullableArg
+#define FuncNullableArg(Arg)
+#endif
+
+#ifndef FuncNullableAll
+#define FuncNullableAll
+#endif
+
 #else
 #ifndef ASM
 #define ASM(X)                          ((void)0)
@@ -296,9 +321,6 @@ union ARGB
 #define __DEPRECATED__ 
 #endif
 
- * A.) This function always results in a infinite loop;
- * b.) This function calls a variation of exit();
- */
 #ifndef __FUNC__EXIT__POINT__
 #define __FUNC__EXIT__POINT__ 
 #endif
@@ -309,10 +331,6 @@ union ARGB
 
 #ifndef __FUNC__ARG__ALLOC__SIZE__
 #define __FUNC__ARG__ALLOC__SIZE__  
-#endif
-
-#ifndef __cplusplus
-#define fallthrough 
 #endif
 
 #ifndef __FUNC__NO__OTHER__CALL__
@@ -335,6 +353,10 @@ union ARGB
 #define _PRAGMA_ONCE_
 #endif
 
+#ifndef __cplusplus
+#define fallthrough 
+#endif
+
 #ifndef ASSUME
 #define ASSUME(X)   ((void)0)
 #endif
@@ -346,6 +368,46 @@ union ARGB
 #ifndef unlikely
 #define unlikely(X) ((void)0)
 #endif
+
+#ifndef NonNull
+#define NonNull
+#endif
+
+#ifndef NonNullArg
+#define NonNullArg(PTRS_NON_NULL_COUNT)
+#endif
+ 
+#ifndef NonNullAll
+#define NonNullAll
+#endif
+
+#ifndef FuncNullable
+#define FuncNullable
+#endif
+
+#ifndef FuncNullableArg
+#define FuncNullableArg(Arg)
+#endif
+
+#ifndef FuncNullableAll
+#define FuncNullableAll
+#endif
+
+
+#endif
+
+#if defined(__clang__)
+
+#ifndef EnumAsBitFlags
+#define EnumAsBitFlags __attribute__((flag_enum))
+#endif
+
+#else
+
+#ifndef EnumAsBitFlags
+#define EnumAsBitFlags
+#endif
+
 #endif
 
 

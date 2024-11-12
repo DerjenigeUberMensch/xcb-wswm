@@ -3,6 +3,7 @@
 
 
 #include "XCB-TRL/xcb_trl.h"
+#include "util.h"
 
 enum PropertyType
 {
@@ -73,224 +74,224 @@ GetPropCookie
 
 
 
-XCBCookie
+XCBCookie NonNull
 PropGetInvalidCookie(
         XCBDisplay *display, 
         XCBWindow win
         );
 
-XCBCookie 
+XCBCookie NonNull
 PropGetTransientCookie(
         XCBDisplay *display, 
         XCBWindow window
         );
 
-XCBCookie 
+XCBCookie NonNull
 PropGetWindowStateCookie(
         XCBDisplay *display, 
         XCBWindow window
         );
 
-XCBCookie 
+XCBCookie NonNull
 PropGetWindowTypeCookie(
         XCBDisplay *display, 
         XCBWindow window
         );
 
-XCBCookie 
+XCBCookie NonNull
 PropGetSizeHintsCookie(
         XCBDisplay *display, 
         XCBWindow window
         );
 
-XCBCookie 
+XCBCookie NonNull
 PropGetWMHintsCookie(
         XCBDisplay *display, 
         XCBWindow window
         );
 
-XCBCookie 
+XCBCookie NonNull
 PropGetWMClassCookie(
         XCBDisplay *display, 
         XCBWindow window
         );
 
-XCBCookie 
+XCBCookie NonNull
 PropGetWMProtocolCookie(
         XCBDisplay *display, 
         XCBWindow window
         );
 
-XCBCookie 
+XCBCookie NonNull
 PropGetStrutCookie(
         XCBDisplay *display, 
         XCBWindow window
         );
 
-XCBCookie 
+XCBCookie NonNull
 PropGetStrutpCookie(
         XCBDisplay *display, 
         XCBWindow window
         );
 
-XCBCookie 
+XCBCookie NonNull
 PropGetNetWMNameCookie(
         XCBDisplay *display, 
         XCBWindow window
         );
 
-XCBCookie 
+XCBCookie NonNull
 PropGetWMNameCookie(
         XCBDisplay *display, 
         XCBWindow window
         );
 
-XCBCookie 
+XCBCookie NonNull
 PropGetPidCookie(
         XCBDisplay *display, 
         XCBWindow window
         );
 
-XCBCookie 
+XCBCookie NonNull
 PropGetIconCookie(
         XCBDisplay *display, 
         XCBWindow window
         );
 
-XCBCookie 
+XCBCookie NonNull
 PropGetMotifHintsCookie(
         XCBDisplay *display, 
         XCBWindow window
         );
 
-void 
+void NonNullAll
 PropUpdateInvalid(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
-void 
+void NonNullAll
 PropUpdateTrans(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
-void 
+void NonNullAll
 PropUpdateWindowState(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
-void 
+void NonNullAll
 PropUpdateWindowType(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
-void 
+void NonNullAll
 PropUpdateSizeHints(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
-void 
+void NonNullAll
 PropUpdateWMHints(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
-void 
+void NonNullAll
 PropUpdateWMClass(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
-void 
+void NonNullAll
 PropUpdateWMProtocol(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
-void 
+void NonNullAll
 PropUpdateStrut(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
-void 
+void NonNullAll
 PropUpdateStrutP(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
-void 
+void NonNullAll
 PropUpdateNetWMName(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
-void 
+void NonNullAll
 PropUpdateWMName(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
-void 
+void NonNullAll
 PropUpdatePid(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
-void 
+void NonNullAll
 PropUpdateIcon(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
-void 
+void NonNullAll
 PropUpdateMotifHints(
        XCBDisplay *display, 
        GetPropCookie *cookie
        );
 
-void 
+void NonNullAll
 PropUpdateManage(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
-void 
+void NonNullAll
 PropUpdateUnmanage(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
-void 
+void NonNullAll
 PropUpdateSetWType(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
-void 
+void NonNullAll
 PropUpdateUnsetWType(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
-void 
+void NonNullAll
 PropUpdateSetWState(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
-void 
+void NonNullAll
 PropUpdateUnsetWState(
         XCBDisplay *display, 
         GetPropCookie *cookie
         );
 
 
-void
+void NonNullAll
 PropUpdateProperty(
         XCBDisplay *display,
         GetPropCookie *cookie
