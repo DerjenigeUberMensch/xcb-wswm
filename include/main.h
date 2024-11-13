@@ -153,12 +153,6 @@ struct MotifWmHints
     uint32_t status;
 };
 
-/* Checks given the provided information if a window is eligible to be a new bar.
- * if it is then it becomes the new bar.
- * RETURN: 0 on Success.
- * RETURN: 1 on no new bar (Failure).
-*/
-uint8_t NonNullAll checknewbar(Monitor *m, Client *c, const uint8_t has_strut_or_strut_partial);
 /* Inital startup check if there is another window manager running.
 */
 void checkotherwm(void);
@@ -216,8 +210,6 @@ void scan(void);
 void setup(void);
 /* Sets up Atoms ID's from the XServer */
 void setupatoms(void);
-/* Sets up special data. */
-void NonNullAll setupbar(Monitor *m, Client *bar);
 /* Loads CFG data into Settings struct. */
 void setupcfg(void);
 /* Sets up System related data */
@@ -240,10 +232,6 @@ void specialconds(int argc, char *argcv[]);
 void startup(void);
 /* Starts the wm basic process */
 void startupwm(void);
-/* updates the Status Bar Position from given monitor */
-void NonNull updatebarpos(Monitor *m);
-/* updates the bar geometry from the given monitor */
-void NonNull updatebargeom(Monitor *m);
 /* Wakups the current X connection by sending a event to it */
 void NonNull wakeupconnection(XCBDisplay *display, int screen);
 /* Error handler */

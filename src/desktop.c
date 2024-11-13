@@ -2,6 +2,7 @@
 #include "client.h"
 #include "monitor.h"
 #include "desktop.h"
+#include "bar.h"
 #include "main.h"
 
 extern WM _wm;

@@ -4,6 +4,7 @@
 #include "keybinds.h"
 #include "hashing.h"
 #include "getprop.h"
+#include "bar.h"
 
 #include <string.h>
 #include <math.h>
@@ -787,13 +788,6 @@ __DEPRECATED__ u32 ISMAPPED(Client *c) { return c->flags & ClientFlagMapped; }
 u32 SHOWDECOR(Client *c)        { return c->flags & ClientFlagShowDecor; }
 u32 ISSELECTED(Client *c)       { return c->desktop->sel == c; }
         
-u32 COULDBEBAR(Client *c, uint8_t strut) 
-                                {
-                                    const u8 sticky = !!ISSTICKY(c);
-                                    const u8 isdock = !!(ISDOCK(c));
-                                    const u8 above = !!ISABOVE(c); 
-                                    return (sticky && strut && (above || isdock));
-                                }
 /* EWMH Window types */
 u32 ISDESKTOP(Client *c)        { return c->ewmhflags & WTypeFlagDesktop; }
 u32 ISDOCK(Client *c)           { return c->ewmhflags & WTypeFlagDock; }

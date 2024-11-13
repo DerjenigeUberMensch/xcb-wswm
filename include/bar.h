@@ -1,41 +1,42 @@
-#ifndef BAR_H_
-#define BAR_H_
+#ifndef __BAR__H__
+#define __BAR__H__
 
 #include <stdint.h>
 
-#include "XCB-TRL/xcb_trl.h"
+#include "util.h"
 
 
-
-#define _SHOW_BAR           ((1 << 1))
-
-#define SHOWBAR(B)          (((B)->flags & _SHOW_BAR))
-
-
-typedef struct Bar Bar;
-
-struct Bar
+enum 
+BarSides
 {
-    int16_t x;
-    int16_t y;
-    uint16_t w;
-    uint16_t h;
-
-    uint8_t flags;
-    uint8_t pad[3];
-
-    XCBWindow win;
-    XCBPixmap pix;
-    XCBGC gc;
-    XCBDisplay *dpy;
-    unsigned int screen;
-
-    size_t buffsize;
-    uint32_t *writebuff;
+    BarSideLeft, 
+    BarSideRight, 
+    BarSideTop, 
+    BarSideBottom,
 };
 
 
-void setshowbar(Bar *bar, uint8_t state);
-void resizebar(Bar *bar, int32_t x, int32_t y, int32_t w, int32_t h);
+
+struct Client;
+struct Monitor;
+
+
+/* checks if a client could be a bar */
+uint32_t NonNull COULDBEBAR(struct Client *c, uint8_t strut);
+/* Gets the bar side in which it is relative to the screen */
+enum BarSides NonNullAll GETBARSIDE(struct Monitor *m, struct Client *bar, uint8_t get_prev_side);
+
+/* Checks given the provided information if a window is eligible to be a new bar.
+ * if it is then it becomes the new bar.
+ * RETURN: EXIT_SUCCESS on Success.
+ * RETURN: EXIT_FAILURE on no new bar (Failure).
+*/
+uint8_t NonNullAll checknewbar(struct Monitor *m, struct Client *c, const uint8_t has_strut_or_strut_partial);
+/* Sets up special data. */
+void NonNullAll setupbar(struct Monitor *m, struct Client *bar);
+/* updates the bar geometry from the given monitor */
+void NonNull updatebargeom(struct Monitor *m);
+/* updates the Status Bar Position from given monitor */
+void NonNull updatebarpos(struct Monitor *m);
 
 #endif
