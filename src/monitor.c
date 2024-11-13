@@ -1,8 +1,9 @@
 #include <X11/cursorfont.h>
 /* keycodes */
 #include <X11/keysym.h>
-#include "monitor.h"
 
+#include "monitor.h"
+#include "bar.h"
 #include "main.h"
 
 #include <string.h>
