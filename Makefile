@@ -104,6 +104,8 @@ debug: export CFLAGS := $(CFLAGS) $(COMPILE_FLAGS) $(DCOMPILE_FLAGS)
 debug: export LDFLAGS := $(LDFLAGS) $(LINK_FLAGS) $(DLINK_FLAGS)
 size: export CFLAGS := $(CFLAGS) $(COMPILE_FLAGS) $(SCOMPILE_FLAGS)
 size: export LDFLAGS := $(LDFLAGS) $(LINK_FLAGS) $(RLINK_FLAGS)
+none: export CFLAGS := $(CFLAGS) $(COMPILE_FLAGS) -O0
+none: export LDFLAGS := $(LDFLAGS) $(LINK_FLAGS) -O0
 
 
 # Build and output paths
@@ -113,6 +115,8 @@ debug: export BUILD_PATH := build/debug
 debug: export BIN_PATH := bin/debug
 size: export BUILD_PATH := build/size
 size:export BIN_PATH := bin/size
+none: export BUILD_PATH := build/none
+none:export BIN_PATH := bin/none
 
 install: export BIN_PATH := bin/release
 
@@ -198,6 +202,18 @@ ifeq ($(USE_VERSION), true)
 	@echo "Beginning size build v$(VERSION_STRING)"
 else
 	@echo "Beginning size build"
+endif
+	@$(START_TIME)
+	@$(MAKE) all --no-print-directory
+	@echo -n "Total build time: "
+	@$(END_TIME)
+
+.PHONY: none
+none: dirs
+ifeq ($(USE_VERSION), true)
+	@echo "Beginning none build v$(VERSION_STRING)"
+else
+	@echo "Beginning none build"
 endif
 	@$(START_TIME)
 	@$(MAKE) all --no-print-directory

@@ -227,5 +227,6 @@ USWipe(
     }
     SCParser *cfg = settings->cfg;
     SCParserDestroy(cfg);
+    free(cfg);
     memset(settings, 0, sizeof(UserSettings));
 }
