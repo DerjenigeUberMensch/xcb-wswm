@@ -248,7 +248,7 @@ __SC__PARSER__SEARCH__INDEX__(
     }
     else
     {
-        const uint32_t LAST = GArrayEnd(&parser->items);
+        const uint32_t LAST = parser->items_len;
         uint32_t i;
         SCItem *item;
         for(i = 0; i < LAST; ++i)
@@ -292,7 +292,7 @@ SCParserSearchSlow(
     if(!parser || !NAME)
     {   return NULL;
     }
-    const uint32_t LAST = GArrayEnd(&parser->items);
+    const uint32_t LAST = parser->items_len;
     uint32_t i;
     SCItem *item;
     for(i = 0; i < LAST; ++i)
@@ -514,7 +514,7 @@ SCParserWrite(
     {   return FAILURE;
     }
 
-    const uint32_t END = GArrayEnd(&parser->items);
+    const uint32_t END = parser->items_len;
     SCItem *item;
     uint32_t i;
 
@@ -566,7 +566,7 @@ SCParserDestroy(
     if(!parser)
     {   return;
     }
-    const uint32_t END = GArrayEnd(&parser->items);
+    const uint32_t END = parser->items_len;
     uint32_t i;
     SCItem *item;
     for(i = 0; i < END; ++i)
