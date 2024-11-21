@@ -6,126 +6,70 @@
 
 #include "XCB-TRL/xcb_trl.h"
 #include "settings.h"
-#include "parser.h"
-
-#define _WM_DIR_NAME_           "vox-wm"
-#define _WM_SESSION_FILE_NAME_  "session.cfg"
 
 
-typedef struct SessionMonSaveID SessionMonSaveID;
-typedef struct SessionMonSave SessionMonSave;
-typedef struct SessionBarSave SessionBarSave;
-typedef struct SessionBarSaveID SessionBarSaveID;
-
-typedef struct SessionDesktopSaveID SessionDesktopSaveID;
+typedef struct SessionSettings SessionSettings;
+typedef struct SessionMonitorSave SessionMonitorSave;
 typedef struct SessionDesktopSave SessionDesktopSave;
-
-typedef struct SessionClientSaveID SessionClientSaveID;
 typedef struct SessionClientSave SessionClientSave;
 
+struct
+SessionSettings
+{
+    SCParser *cfg;
+};
 
-
-struct 
-SessionMonSaveID
+struct
+SessionMonitorSave
 {
     int16_t mx;
     int16_t my;
-    uint16_t mw;
-    uint16_t mh;
-};
-
-struct
-SessionBarSaveID
-{
-    char *classname;
-    char *instancename;
-};
-
-struct
-SessionBarSave
-{
-    int x;
-};
-
-
-struct 
-SessionMonSave
-{
+    int16_t mw;
+    int16_t mh;
+    int16_t wx;
+    int16_t wy;
+    int16_t ww;
+    int16_t wh;
+    uint16_t deskselnum;
     uint16_t deskcount;
-    uint16_t desksel;
-    /* ID */
-    SessionMonSaveID id;
-};
-
-struct
-SessionDesktopSaveID
-{   
-    int16_t num;
 };
 
 struct
 SessionDesktopSave
 {
+    int16_t desknum;
     uint8_t layout;
-    uint8_t olayout;
-    XCBWindow sel;
-    /* ID */
-    SessionDesktopSaveID id;
-};
-
-struct
-SessionClientSaveID
-{   
-    XCBWindow win;
+    uint8_t oldlayout;
 };
 
 struct
 SessionClientSave
 {
-    int16_t x;
-    int16_t y;
-    uint16_t w;
-    uint16_t h;
+    int16_t oldx;
+    int16_t oldy;
 
-    int16_t ox;
-    int16_t oy;
-    uint16_t ow;
-    uint16_t oh;
+    int16_t oldw;
+    int16_t oldh;
 
     uint16_t bw;
-    uint16_t obw;
-    uint16_t bcol;
-    
+    uint16_t oldbw;
 
-    float mina;
-    float maxa;
+    XCBWindow win;
 
-    uint16_t basew;
-    uint16_t baseh;
+    XCBWindow next;
+    XCBWindow prev;
 
-    uint16_t incw;
-    uint16_t inch;
+    XCBWindow snext;
+    XCBWindow sprev;
 
-    uint16_t maxw;
-    uint16_t maxh;
+    XCBWindow rnext;
+    XCBWindow rprev;
 
-    uint16_t minw;
-    uint16_t minh;
-
-    pid_t pid;
-
-    uint16_t rstacknum;
-    uint16_t flags;
-    uint32_t ewmhflags;
-    enum XCBBitGravity gravity;
-    /* ID */
-    SessionClientSaveID id;
+    XCBWindow fnext;
+    XCBWindow fprev;
 };
 
-
-
-void
-SessionSave(
+void SessionSave(
         void
         );
 

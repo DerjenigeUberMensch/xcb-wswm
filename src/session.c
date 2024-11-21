@@ -19,6 +19,193 @@
 extern WM _wm;
 
 
+
+
+enum
+{
+    /* Yes this would be read as Monitor Monitor X, but for consitency this is kept as is */
+    MonMX,
+    MonMY,
+    MonMW,
+    MonMH,
+
+    MonWX,
+    MonWY,
+    MonWW,
+    MonWH,
+
+    MonDesktopSelected,
+    MonDesktopCount,
+
+    MonLAST,
+};
+
+enum
+{
+    DesktopNumber,
+
+    DesktopLayout,
+    DesktopOldLayout,
+
+    DesktopLAST,
+};
+
+enum
+{
+    ClientOldX,
+    ClientOldY,
+    ClientOldW,
+    ClientOldH,
+
+    ClientX,
+    ClientY,
+    ClientW,
+    ClientH,
+
+    ClientBorderWidth,
+    ClientOldBorderWidth,
+    ClientBorderColour,
+
+    ClientWindow,
+
+    ClientNext,
+    ClientPrev,
+
+    ClientStackNext,
+    ClientStackPrev,
+
+    ClientRestackNext,
+    ClientRestackPrev,
+
+    ClientFocusNext,
+    ClientFocusPrev,
+
+    ClientFlags,
+    ClientEWMHFlags,
+    ClientHasFocus,
+
+    ClientLAST,
+};
+
+#define VOX_ADD_MEMBER_SESSION(NAME, FIELD_NAME, STRUCT_TYPE, TYPE, DEFAULT_SETTING) \
+        VOX_ADD_MEMBER(NAME, TYPE, offsetof(STRUCT_TYPE, FIELD_NAME), FIELD_SIZEOF(STRUCT_TYPE, FIELD_NAME), DEFAULT_SETTING)
+
+#define VOX_ADD_MEMBER_SESSION_MON(NAME, FIELD_NAME, TYPE, DEFAULT_SETTING) \
+        VOX_ADD_MEMBER_SESSION(NAME, FIELD_NAME, Monitor, TYPE, DEFAULT_SETTING)
+
+#define VOX_ADD_MEMBER_SESSION_DESKTOP(NAME, FIELD_NAME, TYPE, DEFAULT_SETTING) \
+        VOX_ADD_MEMBER_SESSION(NAME, FIELD_NAME, Desktop, TYPE, DEFAULT_SETTING)
+
+#define VOX_ADD_MEMBER_SESSION_CLIENT(NAME, FIELD_NAME, TYPE, DEFAULT_SETTING) \
+        VOX_ADD_MEMBER_SESSION(NAME, FIELD_NAME, Client, TYPE, DEFAULT_SETTING)
+
+const SCSetting MonSave[MonLAST] = 
+{
+    VOX_ADD_MEMBER_SESSION_MON(MonMX, mx, SCTypeSHORT, 0)
+    VOX_ADD_MEMBER_SESSION_MON(MonMY, my, SCTypeSHORT, 0)
+    VOX_ADD_MEMBER_SESSION_MON(MonMW, mw, SCTypeUSHORT, 1)
+    VOX_ADD_MEMBER_SESSION_MON(MonMH, mh, SCTypeUSHORT, 1)
+
+    VOX_ADD_MEMBER_SESSION_MON(MonWX, wx, SCTypeSHORT, 0)
+    VOX_ADD_MEMBER_SESSION_MON(MonWY, wy, SCTypeSHORT, 0)
+    VOX_ADD_MEMBER_SESSION_MON(MonWW, ww, SCTypeUSHORT, 1)
+    VOX_ADD_MEMBER_SESSION_MON(MonWH, wh, SCTypeUSHORT, 1)
+
+    VOX_ADD_MEMBER_SESSION_MON(MonDesktopCount, deskcount, SCTypeUSHORT, 1)
+
+
+    /* These values are overriden, but maintain their type. 
+     * EX:
+     * VOX_ADD_MEMBER_SESSION_XXX(EnumThing, xx, SCTypeMySize, MyValue)
+     *                                       ^^
+     *                              This value is overwritten.
+     *                              Everything else is still read and interpreted the same though.
+     * (Everything below is counted, if none below assume none require overriding)
+     */
+    VOX_ADD_MEMBER_SESSION_MON(MonDesktopSelected, mx, SCTypeUSHORT, 2)
+};
+
+
+
+const SCSetting DesktopSave[DesktopLAST] = 
+{
+    VOX_ADD_MEMBER_SESSION_DESKTOP(DesktopNumber, num, SCTypeSHORT, 0)
+    VOX_ADD_MEMBER_SESSION_DESKTOP(DesktopLayout, layout, SCTypeUCHAR, Tiled)
+    VOX_ADD_MEMBER_SESSION_DESKTOP(DesktopOldLayout, olayout, SCTypeUCHAR, Monocle)
+
+    /* These values are overriden, but maintain their type. 
+     * EX:
+     * VOX_ADD_MEMBER_SESSION_XXX(EnumThing, xx, SCTypeMySize, MyValue)
+     *                                       ^^
+     *                              This value is overwritten.
+     *                              Everything else is still read and interpreted the same though.
+     * (Everything below is counted, if none below assume none require overriding)
+     */
+};
+
+const SCSetting ClientSave[ClientLAST] = 
+{
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientOldX, oldx, SCTypeSHORT, 0)
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientOldY, oldy, SCTypeSHORT, 0)
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientOldW, oldw, SCTypeUSHORT, 1)
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientOldH, oldh, SCTypeUSHORT, 1)
+
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientX, x, SCTypeSHORT, 0)
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientY, y, SCTypeSHORT, 0)
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientW, w, SCTypeUSHORT, 1)
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientH, h, SCTypeUSHORT, 1)
+
+    
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientBorderWidth, bw, SCTypeUSHORT, 0)
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientOldBorderWidth, oldbw, SCTypeUSHORT, 0)
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientBorderColour, bcol, SCTypeUINT, 0)
+
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientWindow, win, SCTypeUINT, 0)
+
+
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientFlags, flags, SCTypeUSHORT, 0)
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientEWMHFlags, ewmhflags, SCTypeUINT, 0)
+
+
+
+
+
+    /* These values are overriden, but maintain their type. 
+     * EX:
+     * VOX_ADD_MEMBER_SESSION_XXX(EnumThing, xx, SCTypeMySize, MyValue)
+     *                                       ^^
+     *                              This value is overwritten.
+     *                              Everything else is still read and interpreted the same though.
+     * (Everything below is counted, if none below assume none require overriding)
+     */
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientNext, win, SCTypeUINT, 0)
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientPrev, win, SCTypeUINT, 0)
+
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientStackNext, win, SCTypeUINT, 0)
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientStackPrev, win, SCTypeUINT, 0)
+
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientRestackNext, win, SCTypeUINT, 0)
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientRestackPrev, win, SCTypeUINT, 0)
+
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientFocusNext, win, SCTypeUINT, 0)
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientFocusPrev, win, SCTypeUINT, 0)
+
+    VOX_ADD_MEMBER_SESSION_CLIENT(ClientHasFocus, win, SCTypeBOOL, 0)
+};
+
+
+
+
+
+void SessionSaveMonitors(SCParser *parse);
+void SessionSaveMonitor(SCParser *parser, Monitor *m);
+void SessionSaveBar(SCParser *parser, Client *c);
+void SessionSaveDesktops(SCParser *parser, Monitor *m);
+void SessionSaveDesktop(SCParser *parser, Desktop *desktop);
+void SessionSaveClients(SCParser *parser, Desktop *desktop);
+void SessionSaveClient(SCParser *parser, Client *c);
+
+
 void
 SessionSave(
         void
@@ -43,168 +230,156 @@ SessionSave(
         Debug0("Failed to create session save file.");
         return;
     }
+
+    SCParser parser;
+
+    const u32 PARSER_LENGTH = MonLAST + DesktopLAST + ClientLAST;
+
+    SCParserCreateFilled(&parser, PARSER_LENGTH);
+    SessionSaveMonitors(&parser);
+    SCParserDestroy(&parser);
 }
-
-int
-SessionSaveMon(
-        SessionMonSave *save,
-        char *buff,
-        unsigned int buff_len
-        )
-{
-    const u16 deskcount = save->deskcount;
-    snprintf(
-            buff, buff_len, 
-            "DeskCount: %d" "\n"
-            "" "\n"
-            "" "\n"
-            , 
-            deskcount
-            );
-    return EXIT_SUCCESS;
-}
-
-
-
 
 
 void
-SessionGetMonSave(
-        Monitor *m,
-        SessionMonSave *save_return
-        )
+SessionSaveMonitors(
+    SCParser *parser
+    )
 {
-    SessionMonSaveID *id = &save_return->id;
-
-    const i16 mx = m->mx;
-    const i16 my = m->my;
-    const i16 mw = m->mw;
-    const i16 mh = m->mh;
-
-    /* ID */
-    id->mx = mx;
-    id->my = my;
-    id->mw = mw;
-    id->mh = mh;
-
-    const u16 deskcount = m->deskcount;
-    const u16 deskselnum = m->desksel->num;
-
-    /* settings */
-    save_return->deskcount = deskcount;
-    save_return->desksel = deskselnum;
+    Monitor *m;
+    for(m = _wm.mons; m; m = nextmonitor(m))
+    {   SessionSaveMonitor(parser, m);
+    }
 }
 
 void
-SessionGetDesktopSave(
-        Desktop *desk,
-        SessionDesktopSave *save_return
-        )
+SessionSaveMonitor(
+    SCParser *parser,
+    Monitor *m
+    )
 {
-    SessionDesktopSaveID *id = &save_return->id;
+    i16 mx = m->mx;
+    i16 my = m->my;
+    u16 mw = m->mw;
+    u16 mh = m->mh;
+    i16 wx = m->wx;
+    i16 wy = m->wy;
+    u16 ww = m->ww;
+    u16 wh = m->wh;
 
-    const i16 num = desk->num;
+    u16 desksel = m->desksel->num;
+    u16 deskcount = m->deskcount;
 
-    /* ID */
-    id->num = num;
 
-    const u8 layout = desk->layout;
-    const u8 olayout = desk->olayout;
-    const XCBWindow sel = desk->sel ? desk->sel->win : 0;
-
-    /* settings */
-
-    save_return->layout = layout;
-    save_return->olayout = olayout;
-    save_return->sel = sel;
+    SessionSaveBar(parser, m->bar);
+    SessionSaveDesktops(parser, m);
 }
 
 void
-SessionGetClientSave(
-        Client *c,
-        SessionClientSave *save_return
-        )
+SessionSaveBar(
+    SCParser *parser,
+    Client *bar
+    )
 {
-    SessionClientSaveID *id = &save_return->id;
+    if(!bar)
+    {   return;
+    }
+}
 
-    const XCBWindow win = c->win;
-    /* ID */
-    id->win = win;
+void
+SessionSaveDesktops(
+    SCParser *parser,
+    Monitor *m
+    )
+{
+    Desktop *desktop;
+    for(desktop = m->desktops; desktop; desktop = nextdesktop(desktop))
+    {   SessionSaveDesktop(parser, desktop);
+    }
+}
 
-    const i16 x = c->x;
-    const i16 y = c->y;
-    const u16 w = c->w;
-    const u16 h = c->h;
+void
+SessionSaveDesktop(
+    SCParser *parser,
+    Desktop *desktop
+    )
+{
+    i16 desknum = desktop->num;
+    u8 layout = desktop->layout;
+    u8 old_layout = desktop->olayout;
+    SessionSaveClients(parser, desktop);
+}
 
-    const i16 ox = c->oldx;
-    const i16 oy = c->oldy;
-    const i16 ow = c->oldw;
-    const i16 oh = c->oldh;
+void
+SessionSaveClients(
+    SCParser *parser,
+    Desktop *desktop
+    )
+{
+    Client *c;
+    for(c = startclient(desktop); c; c = nextclient(c))
+    {   SessionSaveClient(parser, c);
+    }
+}
 
-    const u16 bw = c->bw;
-    const u16 obw = c->oldbw;
-    const u32 bcol = c->bcol;
+void
+SessionSaveClient(
+    SCParser *parser,
+    Client *c
+    )
+{
 
-    const float mina = c->mina;
-    const float maxa = c->maxa;
+    i16 ox = c->oldx;
+    i16 oy = c->oldy;
+    i16 ow = c->oldw;
+    i16 oh = c->oldh;
 
-    const u16 basew = c->basew;
-    const u16 baseh = c->baseh;
+    i16 x = c->x;
+    i16 y = c->y;
+    i16 w = c->w;
+    i16 h = c->h;
 
-    const u16 incw = c->incw;
-    const u16 inch = c->inch;
+    u16 bw = c->bw;
+    u16 oldwbw = c->oldbw;
+    u32 bcol = c->bcol;
 
-    const u16 maxw = c->maxw;
-    const u16 maxh = c->maxh;
+    XCBWindow win = c->win;
+
+    XCBWindow next = nextclient(c) ? nextclient(c)->win : 0;
+    XCBWindow prev = prevclient(c) ? prevclient(c)->win : 0;
     
-    const u16 minw = c->minw;
-    const u16 minh = c->minh;
+    XCBWindow snext = nextstack(c) ? nextstack(c)->win : 0;
+    XCBWindow sprev = prevstack(c) ? prevstack(c)->win : 0;
 
-    const pid_t pid = c->pid;
+    XCBWindow rnext = nextrstack(c) ? nextrstack(c)->win : 0;
+    XCBWindow rprev = nextrstack(c) ? nextrstack(c)->win : 0;
 
-    const u16 rstacknum = c->rstacknum;
-    const u16 flags = c->flags;
-    const u32 ewmhflags = c->ewmhflags;
-    const enum XCBBitGravity gravity = c->gravity;
+    XCBWindow fnext = nextfocus(c) ? nextfocus(c)->win : 0;
+    XCBWindow fprev = prevfocus(c) ? prevfocus(c)->win : 0;
 
-
-    /* settings */
-
-    save_return->x = x;
-    save_return->y = y;
-    save_return->w = w;
-    save_return->h = h;
-
-    save_return->ox = ox;
-    save_return->oy = oy;
-    save_return->ow = ow;
-    save_return->oh = oh;
-
-    save_return->bw = bw;
-    save_return->obw = obw;
-    save_return->bcol = bcol;
-
-    save_return->mina = mina;
-    save_return->maxa = maxa;
-
-    save_return->basew = basew;
-    save_return->baseh = baseh;
-
-    save_return->incw = incw;
-    save_return->inch = inch;
-
-    save_return->maxw = maxw;
-    save_return->maxh = maxh;
-
-    save_return->minw = minw;
-    save_return->minh = minh;
-
-    save_return->pid = pid;
-
-    save_return->rstacknum = rstacknum;
-    save_return->flags = flags;
-    save_return->ewmhflags = ewmhflags;
-    save_return->gravity = gravity;
+    u16 flags = c->flags;
+    u32 ewmhflags = c->ewmhflags;
+    u8 sel = c->desktop->sel == c;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
