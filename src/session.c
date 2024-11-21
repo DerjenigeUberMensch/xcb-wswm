@@ -230,14 +230,6 @@ SessionSave(
         Debug0("Failed to create session save file.");
         return;
     }
-
-    SCParser parser;
-
-    const u32 PARSER_LENGTH = MonLAST + DesktopLAST + ClientLAST;
-
-    SCParserCreateFilled(&parser, PARSER_LENGTH);
-    SessionSaveMonitors(&parser);
-    SCParserDestroy(&parser);
 }
 
 
