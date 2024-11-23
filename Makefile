@@ -31,6 +31,8 @@ VERSION = 3.1.0
 SRC_EXT = c
 # Path to the source directory, relative to the makefile
 SRC_PATH = .
+# Exclude dir
+EXCLUDE = tests/
 # Space-separated pkg-config libraries used by this project
 LIBRARIES = ${LIBS}
 # Compilation Architecture.
@@ -135,6 +137,9 @@ rwildcard = $(foreach d, $(wildcard $1*), $(call rwildcard,$d/,$2) \
 ifeq ($(SOURCES),)
 	SOURCES := $(call rwildcard, $(SRC_PATH), *.$(SRC_EXT))
 endif
+
+# Exclude 
+SOURCES := $(filter-out $(addprefix $(SRC_PATH)/$(EXCLUDE),%), $(SOURCES))
 
 # Set the object file names, with the source directory stripped
 # from the path, and the build path prepended in its place

@@ -38,8 +38,7 @@ __Create_Window(unsigned int color, int bw, int bwcolor)
 {
     XSetWindowAttributes wa =
     {
-        .bit_gravity = NorthWestGravity,
-            ///NorthWestGravity,
+        .bit_gravity = StaticGravity,
         .backing_store = WhenMapped,
         .border_pixel = bwcolor,
         .background_pixel = color

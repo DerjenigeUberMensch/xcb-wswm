@@ -3,7 +3,7 @@
 #include "helper.h"
 
 int
-jnzjmp(void)
+main(void)
 {
     __test__start_basic();
 

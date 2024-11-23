@@ -4,7 +4,7 @@
 
 
 int
-jzjmp(void)
+main(void)
 {
     __test__start_basic();
     Atom wtype = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
