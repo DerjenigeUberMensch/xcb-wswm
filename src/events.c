@@ -1566,8 +1566,11 @@ propertynotify(XCBGenericEvent *event)
             else if(atom == netatom[NetWMIcon])
             {   type = PropIcon;
             }
-            /* not found return */
-            return;
+            else
+            {
+                /* not found return */
+                return;
+            }
     }
     /* encase we fuck up later down the line */
     if(type == PropNone || type >= PropLAST)
