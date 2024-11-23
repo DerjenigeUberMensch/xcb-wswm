@@ -1,0 +1,8 @@
+#!/bin/bash
+
+
+
+
+gcc centerpixel.c -o centerpixel -lX11
+gcc restack.c -o restack -lX11
+gcc ssname.c -o ssname -lX11
