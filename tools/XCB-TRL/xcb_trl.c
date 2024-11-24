@@ -58,6 +58,7 @@ typedef int16_t  i16;
 typedef int32_t  i32;
 typedef int64_t  i64;
 
+/* #define XCB_TRL_ENABLE_DEBUG */
 
 #ifdef XCB_TRL_ENABLE_DEBUG
 #define DBG             1
@@ -135,19 +136,16 @@ color_parser_background(
 
 
 #ifdef DBG
-#define _xcb_push_func(cookie) \
-    _xcb_caller item;           \
-    item.id = cookie.sequence;  \
-    item.name = (char *)_fn;    \
-                                \
-    if(_xcb_full_func())        \
-    {                           \
+#define _xcb_push_func(cookie)                                                          \
+    if(_xcb_full_func())                                                                \
+    {                                                                                   \
         /* we dont care it will just wrap back but this might be useful in testing */   \
         _XCB_MANUAL_DEBUG0("DEBUG Ran Out of Space wrapping data...");                  \
     }                                                                                   \
-    front *= front != -1;       \
+    front *= front != -1;                   \
     rear = (rear + 1) % MAX_DEBUG_LIMIT;    \
-    _xcb_funcs[rear] = item;
+    _xcb_funcs[rear].name = (char *)_fn;         \
+    _xcb_ids_[rear] = cookie.sequence;      
 #else
 #define _xcb_push_func(cookie) ((void)cookie)
 #endif
@@ -155,43 +153,20 @@ color_parser_background(
 
 
 typedef struct _xcb_caller _xcb_caller;
+typedef unsigned int _xcb_caller_id_;
 
 struct _xcb_caller 
 {
-    unsigned int id;
     /* TODO: make like a static char *table and just use a uint16_t and save some 6 bytes */
     char *name;
 };
 
 #define MAX_DEBUG_LIMIT     ((32768 << 6))/* the number means nothing its just some random big enough number for most use cases */
-                
+ 
+_xcb_caller_id_ _xcb_ids_[MAX_DEBUG_LIMIT];
 _xcb_caller _xcb_funcs[MAX_DEBUG_LIMIT];
 long long rear = -1;
 long long front = -1;
-
-
-/*
-static void
-_xcb_jmpck(XCBDisplay *d, XCBGenericError *err)
-{
-    fprintf(stderr, "_XCB_DEBUG_\n");
-    fprintf(stderr, "%s %s\n", XCBGetErrorCodeText(err->error_code), XCBGetErrorMajorCodeText(err->major_code));
-    fprintf(stderr, 
-            "error_code:    [%d]\n"
-            "major_code:    [%d]\n"
-            "minor_code:    [%d]\n"
-            "sequence:      [%d]\n"
-            "response_type: [%d]\n"
-            "resource_id:   [%d]\n"
-            "full_sequence: [%d]\n"
-              ,
-           err->error_code, err->major_code, err->minor_code, 
-           err->sequence, err->response_type, err->resource_id, 
-           err->full_sequence);
-
-}
-*/
-
 
 static int _xcb_full_func(void);
 static int _xcb_empty_func(void);
@@ -208,8 +183,8 @@ _xcb_pop_func(XCBCookie cookie)
         return;
     }
 
+    _xcb_ids_[front] = 0;
     _xcb_funcs[front].name = NULL;
-    _xcb_funcs[front].id = 0;
     if(front == rear)
     {
         front = -1;
@@ -330,7 +305,7 @@ XCBDebugGetAdjacentCallers(
     unsigned int id = cookie.sequence;
     for(long long i = front; i != rear; i = (i + 1) % MAX_DEBUG_LIMIT)
     {
-        if(_xcb_funcs[i].id == id)
+        if(_xcb_ids_[i] == id)
         {   
         }
     }
@@ -346,7 +321,7 @@ XCBDebugGetNameFromId(
 #ifdef XCB_TRL_ENABLE_DEBUG
     for(long long i = front; i != rear; i = (i + 1) % MAX_DEBUG_LIMIT)
     {   
-        if(_xcb_funcs[i].id == id.sequence)
+        if(_xcb_ids_[i] == id.sequence)
         {   return _xcb_funcs[i].name;
         }
     }
@@ -363,7 +338,7 @@ _xcb_handler(
 #ifdef XCB_TRL_ENABLE_DEBUG
     for(long long i = front; i != rear; i = (i + 1) % MAX_DEBUG_LIMIT)
     {   
-        if(_xcb_funcs[i].id == err->error_code)
+        if(_xcb_ids_[i]== err->error_code)
         {   _XCB_MANUAL_DEBUG("%s", _xcb_funcs[i].name);
         }
     }
