@@ -1024,6 +1024,7 @@ ToggleStatusBar(const Arg *arg)
     {   return;
     }
     sethidden(m->bar, !ISHIDDEN(m->bar));
+    showhide(m->bar);
     arrange(_wm.selmon->desksel);
     XCBFlush(_wm.dpy);
 }
@@ -1054,7 +1055,7 @@ ToggleDesktop(const Arg *arg)
             setdesktopsel(_wm.selmon, desk);
             /* shouldnt need to as clients probably still retained order unless they got corrupted but just in case */
             arrange(desk);
-            focus(NULL);
+            focus(desk->focus);
             XCBFlush(_wm.dpy);
             break;
         }
