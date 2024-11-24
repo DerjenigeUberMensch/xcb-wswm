@@ -35,23 +35,26 @@
 #define null ((void *)0)
 #endif
 
-
 #if !defined(__cplusplus)
-
-    typedef enum { false, true } booll;
-    typedef enum { False, True } boolc;
-
     #if defined(__STDC_VERSION__) && __STDC_VERSION__ > 201710L
         /* true and false are keywords */
-    #elif !defined(__STDC_VERSION__)
-        /* 
-         * if not defined then must be c90 or c89 
-         */
-        typedef enum { false, true } bool;
+        #define True true
+        #define False false
     #else
-        typedef _Bool bool;
+        typedef enum { False, True } boolc;
+        #if !defined(__STDC_VERSION__)
+            /* 
+             * if not defined then must be c90 or c89 
+             */
+            typedef enum { false, true } bool;
+        #else
+            typedef enum { false, true } booll;
+            typedef _Bool bool;
+        #endif
     #endif
 #else
+    #define True true
+    #define False false
     typedef bool _Bool;
 #endif
 
