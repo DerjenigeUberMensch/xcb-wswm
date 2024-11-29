@@ -3,6 +3,6 @@
 
 
 
-gcc centerpixel.c -o centerpixel -lX11
-gcc restack.c -o restack -lX11
-gcc ssname.c -o ssname -lX11
+cc centerpixel.c -o centerpixel -lX11
+cc restack.c -o restack -lX11
+cc ssname.c -o ssname -lX11
