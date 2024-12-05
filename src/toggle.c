@@ -897,6 +897,9 @@ SpawnWindow(const Arg *arg)
         err = EX_OSERR;
         return;
     }
+
+    struct sigaction sa;
+
     switch((child = fork()))
     {
         case -1:
@@ -906,10 +909,16 @@ SpawnWindow(const Arg *arg)
             break;
         case 0:
             close(pipefds[0]);
-            struct sigaction sa;
             if (_wm.dpy)
-                close(XCBConnectionNumber(_wm.dpy));
-            setsid();
+            {   close(XCBConnectionNumber(_wm.dpy));
+            }
+
+            if(setsid() < 0)
+            {   
+                perror("setsid");
+                _exit(EXIT_FAILURE);
+            }
+            
             sigemptyset(&sa.sa_mask);
             sa.sa_flags = 0;
             sa.sa_handler = SIG_DFL;
@@ -923,7 +932,7 @@ SpawnWindow(const Arg *arg)
             execvp(((char **)arg->v)[0], (char **)arg->v);
             Debug0("execvp() failed.");
             write(pipefds[1], &errno, sizeof(int));
-            _exit(0);
+            _exit(EXIT_SUCCESS);
             break;
         default:
             close(pipefds[1]);
@@ -940,6 +949,7 @@ SpawnWindow(const Arg *arg)
                 return;
             }
             close(pipefds[0]);
+#ifdef DEBUG
             Debug0("waiting for child...");
             /* would do 0, over WNOHANG, but as the name implies we cant hang the window manager any time */
             while (waitpid(child, &err, WNOHANG) == -1)
@@ -958,6 +968,7 @@ SpawnWindow(const Arg *arg)
             else if(WIFSIGNALED(err))
             {   Debug("child killed by %d\n", WTERMSIG(err));
             }
+#endif
     }
 }
 
