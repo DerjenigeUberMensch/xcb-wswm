@@ -8,6 +8,40 @@
 
 extern WM _wm;
 
+struct
+ArgCVCommand
+{
+    void (*const func_run)(void);                   /* if NULL, command is not displayed */
+    const char *const str_name_and_description;
+    uint16_t name_len;
+    uint16_t description_len;
+};
+
+#define ARG_CV_NEW_COMMAND(NAME, DESCRIPTION, FUNCTION)             \
+            {                                                       \
+                .func_run = FUNCTION,                               \
+                .str_name_and_description = NAME "\0" DESCRIPTION,  \
+                .name_len = sizeof(NAME) - 1,                       \
+                .description_len = sizeof(DESCRIPTION) - 1,         \
+            },
+
+
+const char *const usage_format = "Usage: " MARK " [OPTION] ...";
+
+const struct ArgCVCommand
+__single__commands__[] = 
+{
+    ARG_CV_NEW_COMMAND("h", "Help Information", ArgcvDisplayHelp)
+    ARG_CV_NEW_COMMAND("v", "Version Information", ArgcvDisplayCompilerInfo)
+};
+
+const struct ArgCVCommand
+__double__commands__[] = 
+{
+    ARG_CV_NEW_COMMAND("NULL", "NULL.", NULL)
+};
+
+
 bool
 ArgcvIsSingleCommand(
         char *str,
@@ -19,7 +53,7 @@ ArgcvIsSingleCommand(
     const unsigned char SINGLE_OPTION_INDEX_LETTER = 1;
 
 
-    const bool LONG_ENOUGH = len == MIN_LENGTH;
+    const bool LONG_ENOUGH = len >= MIN_LENGTH;
     const bool VALID_DASH = str[SINGLE_OPTION_INDEX_DASH] == '-';
     const bool VALID_CHAR = isalpha(str[SINGLE_OPTION_INDEX_LETTER]);
 
@@ -49,10 +83,30 @@ ArgcvDisplayHelp(
         void
         )
 {
-    puts( "Usage: " MARK " [options]\n"
-            "  -h           Help Information.\n"
-            "  -v           Compiler Information."
-          );
+    puts(usage_format);
+
+    i32 i;
+                                /* These random spaces are used in standard 'help' formatting IDK dont know why */
+    const char *const format_single = "  -%s           %s.\n";
+    const char *const format_double = "  --%s          %s.\n";
+    for(i = 0; i < LENGTH(__single__commands__); ++i)
+    {
+        const struct ArgCVCommand *const command = __single__commands__ + i;
+
+        if(command->func_run)
+        {   printf(format_single, command->str_name_and_description, command->str_name_and_description + command->name_len + 1);
+        }
+    }
+
+    for(i = 0; i < LENGTH(__double__commands__); ++i)
+    {
+        const struct ArgCVCommand *const command = __double__commands__ + i;
+        if(command->func_run)
+        {   printf(format_double, command->str_name_and_description, command->str_name_and_description + command->name_len + 1);
+        }
+    }
+
+    exit(EXIT_SUCCESS);
 }
 
 void
@@ -105,6 +159,8 @@ ArgcvDisplayCompilerInfo(
             VERSION,
             MARK
           );
+
+    exit(EXIT_SUCCESS);
 }
 
 void
@@ -122,20 +178,21 @@ ArgcvSingleCommandHandler(
 {
     const unsigned char SINGLE_OPTION_INDEX_LETTER = 1;
 
-    switch(str[SINGLE_OPTION_INDEX_LETTER])
+    int i;
+    for(i = 0; i < LENGTH(__single__commands__); ++i)
     {
-        case 'h':
-            ArgcvDisplayHelp();
-            exit(EXIT_SUCCESS);
-            break;
-        case 'v':
-            ArgcvDisplayCompilerInfo();
-            exit(EXIT_SUCCESS);
-            break;
-        default:
-            ArgcvDisplayBadArgs(str);
-            break;
+        const struct ArgCVCommand *const command = __single__commands__ + i;
+        if(!strcmp(command->str_name_and_description, str + SINGLE_OPTION_INDEX_LETTER))
+        {   
+            if(command->func_run)
+            {   command->func_run();
+            }
+            return;
+        }
     }
+
+    /* command not found, display error */
+    ArgcvDisplayBadArgs(str);
 }
 
 void
@@ -144,15 +201,22 @@ ArgcvDoubleCommandHandler(
         )
 {
     const unsigned char DOUBLE_OPTION_INDEX_STR = 2;
-    char *option = str + DOUBLE_OPTION_INDEX_STR;
 
-    /* PLACEHOLDER */
-    if(!strcmp(option, "NULL"))
-    {   (void)0;
+    int i;
+    for(i = 0; i < LENGTH(__double__commands__); ++i)
+    {
+        const struct ArgCVCommand *const command = __double__commands__ + i;
+        if(!strcmp(command->str_name_and_description, str + DOUBLE_OPTION_INDEX_STR))
+        {   
+            if(command->func_run)
+            {   command->func_run();
+            }
+            return;
+        }
     }
-    else
-    {   ArgcvDisplayBadArgs(str);
-    }
+
+    /* command not found, display error */
+    ArgcvDisplayBadArgs(str);
 }
 
 
