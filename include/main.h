@@ -30,6 +30,7 @@
 #define CLEANMASK(mask)         (mask & ~(_wm.numlockmask|XCB_MOD_MASK_LOCK) & \
                                 (XCB_MOD_MASK_SHIFT|XCB_MOD_MASK_CONTROL| \
                                  XCB_MOD_MASK_1|XCB_MOD_MASK_2|XCB_MOD_MASK_3|XCB_MOD_MASK_4|XCB_MOD_MASK_5))
+#define CLEANBUTTONMASK(mask)   ((mask % (XCBButton5 + 1)) + !mask)
 #define INTERSECT(x,y,w,h,m)    (MAX(0, MIN((x)+(w),(m)->wx+(m)->ww) - MAX((x),(m)->wx)) \
                                 * MAX(0, MIN((y)+(h),(m)->wy+(m)->wh) - MAX((y),(m)->wy)))
 #define LENGTH(X)               (sizeof X / sizeof X[0])

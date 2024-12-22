@@ -249,7 +249,7 @@ DragWindow(
     u16 oldw, oldh;
     u16 bw;
     const XCBCursor cur = cursors[CurMove];
-    const i64 detail = ((XCBButtonPressEvent *)arg->v)->detail;
+    const i64 detail = CLEANBUTTONMASK(((XCBButtonPressEvent *)arg->v)->detail);
     nx = ny = x = y = oldx = oldy = oldw = oldh = 0;
 
     XCBCookie GrabPointerCookie = XCBGrabPointerCookie(_wm.dpy, _wm.root, False, MOUSEMASK, XCB_GRAB_MODE_ASYNC, XCB_GRAB_MODE_ASYNC, XCB_NONE, cur, XCB_CURRENT_TIME);
@@ -360,8 +360,8 @@ DragWindow(
                 /* TODO */
                 case XCB_BUTTON_PRESS:
                     break;
-                case XCB_BUTTON_RELEASE:                                /* failsafe (mainly chromium) */
-                    if(((XCBButtonPressEvent *)ev)->detail == detail || ((XCBButtonPressEvent *)ev)->detail == LMB)
+                case XCB_BUTTON_RELEASE:
+                    if(CLEANBUTTONMASK(((XCBButtonPressEvent *)ev)->detail) == detail)
                     {   running = 0;
                     }
                     break;
@@ -436,7 +436,7 @@ ResizeWindow(const Arg *arg)
     /* get any requests that may have moved the window back */
     XCBSync(_wm.dpy);
     XCBGenericEvent *ev = arg->v;
-    const i64 detail = ((XCBButtonPressEvent *)arg->v)->detail;
+    const i64 detail = CLEANBUTTONMASK(((XCBButtonPressEvent *)arg->v)->detail);
     XCBWindow win = ((XCBButtonPressEvent *)ev)->event;
     Client *c = wintoclient(win);
     XCBDisplay *display = _wm.dpy;
@@ -616,8 +616,8 @@ ResizeWindow(const Arg *arg)
                 /* TODO */
                 case XCB_BUTTON_PRESS:
                     break;
-                case XCB_BUTTON_RELEASE:                                /* failsafe (mainly chromium) */
-                    if(((XCBButtonPressEvent *)ev)->detail == detail || ((XCBButtonPressEvent *)ev)->detail == RMB)
+                case XCB_BUTTON_RELEASE:
+                    if(CLEANBUTTONMASK(((XCBButtonPressEvent *)ev)->detail) == detail)
                     {   running = 0;
                     }
                     break;
@@ -671,7 +671,7 @@ ResizeWindowAlt(const Arg *arg)
     /* get any requests that may have moved the window back */
     XCBSync(_wm.dpy);
     XCBGenericEvent *ev = arg->v;
-    const i64 detail = ((XCBButtonPressEvent *)arg->v)->detail;
+    const i64 detail = CLEANBUTTONMASK(((XCBButtonPressEvent *)arg->v)->detail);
     XCBWindow win = ((XCBButtonPressEvent *)ev)->event;
     Client *c = wintoclient(win);
     XCBDisplay *display = _wm.dpy;
@@ -818,8 +818,8 @@ ResizeWindowAlt(const Arg *arg)
                 /* TODO */
                 case XCB_BUTTON_PRESS:
                     break;
-                case XCB_BUTTON_RELEASE:                                /* failsafe (mainly chromium) */
-                    if(((XCBButtonPressEvent *)ev)->detail == detail || ((XCBButtonPressEvent *)ev)->detail == RMB)
+                case XCB_BUTTON_RELEASE:
+                    if(CLEANBUTTONMASK(((XCBButtonPressEvent *)ev)->detail) == detail) 
                     {   running = 0;
                     }
                     break;

@@ -1284,7 +1284,8 @@ clientmessage(XCBGenericEvent *event)
         else if(atom == netatom[NetMoveResize])
         {
             const int netwmstate = l2;
-            const u8 button = l3;
+            /* some apps decided that they wanna be funny and fuck things up so this check prevents that */
+            const i32 button = CLEANBUTTONMASK(l3);
             XCBButtonPressEvent bev;
             bev.state = SUPER;
             bev.root = _wm.root;
@@ -1292,8 +1293,8 @@ clientmessage(XCBGenericEvent *event)
             bev.child = 0;
             bev.event = win;
             bev.detail = button;
-            bev.root_x = 0;
-            bev.root_y = 0;
+            bev.root_x = l0;
+            bev.root_y = l1;
             bev.event_x = 0;
             bev.event_y = 0;
             bev.sequence = 0;
