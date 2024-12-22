@@ -35,7 +35,8 @@ u32 COULDBEBAR(Client *c, uint8_t strut)
                                     const u8 sticky = !!ISSTICKY(c);
                                     const u8 isdock = !!(ISDOCK(c));
                                     const u8 above = !!ISABOVE(c); 
-                                    return (sticky && strut && (above || isdock));
+
+                                    return (sticky && strut && above && isdock);
                                 }
 
 
