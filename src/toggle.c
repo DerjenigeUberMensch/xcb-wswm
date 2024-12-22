@@ -616,8 +616,8 @@ ResizeWindow(const Arg *arg)
                 /* TODO */
                 case XCB_BUTTON_PRESS:
                     break;
-                case XCB_BUTTON_RELEASE:                                /* failsafe (mainly chromium) */
-                    if(((XCBButtonPressEvent *)ev)->detail == detail || ((XCBButtonPressEvent *)ev)->detail == RMB)
+                case XCB_BUTTON_RELEASE:                                                            /* failsafe (mainly chromium) */
+                    if(((XCBButtonPressEvent *)ev)->detail == detail || ((XCBButtonPressEvent *)ev)->detail == RMB || ((XCBButtonPressEvent *)ev)->detail == LMB)
                     {   running = 0;
                     }
                     break;
