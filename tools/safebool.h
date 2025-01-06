@@ -5,30 +5,27 @@
     #define _STDBOOL_H
 #endif
 /* undef defs */
+
 #ifdef bool
-#undef bool
+    #undef bool
 #endif
+
 #ifdef true
-#undef true
+    #undef true
 #endif
+
 #ifdef True
-#undef True
+    #undef True
 #endif
+
 #ifdef false
-#undef false
+    #undef false
 #endif
+
 #ifdef False
-#undef False
+    #undef False
 #endif
-#ifndef Nill
-#define Nill ((void *)0)
-#endif
-#ifndef NULL
-#define NULL ((void *)0)
-#endif
-#ifndef null
-#define null ((void *)0)
-#endif
+
 #if !defined(__cplusplus)
     #if defined(__STDC_VERSION__) && __STDC_VERSION__ > 201710L
         /* true and false are keywords */
@@ -51,8 +48,9 @@
     #define False false
     typedef bool _Bool;
 #endif
-#ifndef __bool_true_false_are_defined 
-#define __bool_true_false_are_defined (1)
-#endif
-/* __H__ */
+
+#ifndef __bool_true_false_are_defined
+    #define __bool_true_false_are_defined (1)
+#endif  
+
 #endif
