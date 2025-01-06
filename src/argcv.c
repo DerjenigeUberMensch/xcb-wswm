@@ -140,6 +140,27 @@ ArgcvDisplayCompilerInfo(
     minorversion = 0;
     patchversion = #ifdef __INTEL_COMPILER_UPDATE __INTEL_COMPILER_UPDATE #else 0 #endif;
 #endif
+
+    const int MMM = 3;
+    const int SPACE = 1;
+    const int DD = 2;
+
+    /* format is MMM <space> DD <space> YYYY
+     * which looks like this:        Jan  1 20XX
+     * Or like this if double digit: Jan 10 20XX
+     * Furthermore we must use [] instead of char * cause its some addr idk, segfault otherwise
+     */
+    char date [] = __DATE__ "";
+
+    /* This fixes the Jan  1 20XX
+     * where theres just a hanging space there 
+     * Why are we doing all this work, well basically so printf is the only point of failure here, cause why not.
+     * TODO FIXME.
+     */
+    if(date[MMM + SPACE + DD - 2] == ' ')
+    {   date[MMM + SPACE + DD - 2] = '0';
+    }
+
     printf( "Compiler Information.\n"
             "  Compiled:        %s %s\n"
             "  Compiler:        [%s v%d.%d.%d]\n" 
@@ -151,7 +172,7 @@ ArgcvDisplayCompilerInfo(
             "  MARK:            [%s]\n"
             ,
             /* TODO __DATE__ has an extra space for some reason? */ 
-            __DATE__, __TIME__,
+            date, __TIME__,
             compiler, majorversion, minorversion, patchversion,
             __STDC_HOSTED__, __STDC_VERSION__,
             __BYTE_ORDER__,
