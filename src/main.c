@@ -33,8 +33,28 @@
 #include "keybinds.h"
 /* for HELP/DebugGING see under main() or the bottom */
 
-extern void (*handler[XCBLASTEvent]) (XCBGenericEvent *);
+int LOCK_WM(void)       {   
+                            extern WM _wm;
+                            int ret = EXIT_SUCCESS;
+                            if(_wm.use_threads)
+                            {   ret = pthread_mutex_lock(&_wm.mutex);
+                            }
+                            return ret;
+                        }
+int UNLOCK_WM(void)     {
+                            extern WM _wm;
+                            int ret = EXIT_SUCCESS;
+                            if(_wm.use_threads)
+                            {   ret = pthread_mutex_unlock(&_wm.mutex);
+                            }
+                            return ret;
+                        }
 
+
+
+
+
+extern void (*handler[XCBLASTEvent]) (XCBGenericEvent *);
 
 WM _wm;
 UserSettings _cfg;
@@ -120,21 +140,17 @@ cleanup(void)
 void __HOT__
 eventhandler(XCBGenericEvent *ev)
 {
-    /* TODO: Remove references to other clients, and move _wm.use_threads to run() instead. */
-    if(_wm.use_threads)
-    {   pthread_mutex_lock(&_wm.mutex);
-    }
-    /* int for speed */
     const int cleanev = XCB_EVENT_RESPONSE_TYPE(ev);
-    /* Debug("%s", XCBGetEventName(cleanev)); */
-    if(LENGTH(handler) > cleanev)
-    {   handler[cleanev](ev);
+
+    if(LENGTH(handler) < cleanev || cleanev <= -1)
+    {   return;
     }
 
-    /* TODO: Remove references to other clients, and move _wm.use_threads to run() instead. */
-    if(_wm.use_threads)
-    {   pthread_mutex_unlock(&_wm.mutex);
-    }
+    LOCK_WM();
+
+    handler[cleanev](ev);
+
+    UNLOCK_WM();
 }
 
 void

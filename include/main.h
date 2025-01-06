@@ -238,4 +238,9 @@ void NonNull wakeupconnection(XCBDisplay *display, int screen);
 /* Error handler */
 void NonNullArg(1) xerror(XCBDisplay *display, XCBGenericError *error);
 
+
+int LOCK_WM(void);
+int UNLOCK_WM(void);
+
+
 #endif 
