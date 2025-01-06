@@ -19,8 +19,8 @@ extern XCBAtom motifatom;
 
 /* Macro definitions */
 
-u16 OLDWIDTH(Client *c)         { return (c->oldw + (c->bw * 2)); }
-u16 OLDHEIGHT(Client *c)        { return (c->oldw + (c->bw * 2)); }
+u16 OLDWIDTH(Client *c)         { return (c->oldw + (c->oldbw * 2)); }
+u16 OLDHEIGHT(Client *c)        { return (c->oldw + (c->oldbw * 2)); }
 u16 WIDTH(Client *c)            { return (c->w + (c->bw * 2)); }
 u16 HEIGHT(Client *c)           { return (c->h + (c->bw * 2)); } 
 /* Our custom states */

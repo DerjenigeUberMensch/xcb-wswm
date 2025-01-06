@@ -315,15 +315,20 @@ DragWindow(
     else
     {   XCBRaiseWindow(_wm.dpy, win);
     }
+
     XCBFlush(_wm.dpy);
     XCBGenericEvent *ev = NULL;
     running = 1;
     XCBMotionNotifyEvent *mev = NULL;
     XCBTimestamp lasttime = 0;
+
+    /* Unlock as was previous locked */
+    UNLOCK_WM();
     do
     {
         if(ev)
         {
+            LOCK_WM();
             eventhandler(ev);
             switch(XCB_EVENT_RESPONSE_TYPE(ev))
             {
@@ -381,9 +386,14 @@ DragWindow(
                     }
                     break;
             }
+            UNLOCK_WM();
             free(ev);
         }
     } while(_wm.running && running && !XCBNextEvent(_wm.dpy, &ev));
+
+    /* relock to prevent race conditions */
+    LOCK_WM();
+
     running = 0;
     XCBUngrabPointer(_wm.dpy, XCB_CURRENT_TIME);
     Monitor *m;
@@ -403,6 +413,8 @@ DragWindow(
 
     arrange(_wm.selmon->desksel);
     XCBFlush(_wm.dpy);
+
+    /* No unlock as lock previous state was locked, (aka no double lock) */
 }
 
 void
@@ -573,10 +585,15 @@ ResizeWindow(const Arg *arg)
     ev = NULL;
     XCBMotionNotifyEvent *mev = NULL;
     XCBTimestamp lasttime = 0;
+
+    /* Unlock as was previous locked */
+    UNLOCK_WM();
+
     do
     {
         if(ev)
         {
+            LOCK_WM();
             eventhandler(ev);
             switch(XCB_EVENT_RESPONSE_TYPE(ev))
             {   
@@ -637,9 +654,14 @@ ResizeWindow(const Arg *arg)
                     }
                     break;
             }
+            UNLOCK_WM();
             free(ev);
         }
     } while(_wm.running && running && !XCBNextEvent(_wm.dpy, &ev)); 
+
+    /* relock to prevent race conditions */
+    LOCK_WM();
+
     running = 0;
     XCBUngrabPointer(_wm.dpy, XCB_CURRENT_TIME);
     Monitor *m;
@@ -658,6 +680,7 @@ ResizeWindow(const Arg *arg)
     }
     arrange(_wm.selmon->desksel);
     XCBFlush(_wm.dpy);
+    /* No unlock as lock previous state was locked, (aka no double lock) */
 }
 
 void
@@ -793,10 +816,14 @@ ResizeWindowAlt(const Arg *arg)
     running = 1;
     ev = NULL;
     XCBMotionNotifyEvent *mev = NULL;
+
+    /* Unlock as was previous locked */
+    UNLOCK_WM();
     do
     {
         if(ev)
         {
+            LOCK_WM();
             eventhandler(ev);
             switch(XCB_EVENT_RESPONSE_TYPE(ev))
             {   
@@ -839,9 +866,14 @@ ResizeWindowAlt(const Arg *arg)
                     }
                     break;
             }
+            UNLOCK_WM();
             free(ev);
         }
     } while(_wm.running && running && !XCBNextEvent(_wm.dpy, &ev)); 
+
+    /* relock to prevent race conditions */
+    LOCK_WM();
+
     running = 0;
     XCBUngrabPointer(_wm.dpy, XCB_CURRENT_TIME);
     Monitor *m;
@@ -860,6 +892,7 @@ ResizeWindowAlt(const Arg *arg)
     }
     arrange(_wm.selmon->desksel);
     XCBFlush(_wm.dpy);
+    /* No unlock as lock previous state was locked, (aka no double lock) */
 }
 
 
@@ -918,7 +951,11 @@ SpawnWindow(const Arg *arg)
                 perror("setsid");
                 _exit(EXIT_FAILURE);
             }
-            
+
+            close(STDIN_FILENO);
+            close(STDOUT_FILENO);
+            close(STDERR_FILENO);
+
             sigemptyset(&sa.sa_mask);
             sa.sa_flags = 0;
             sa.sa_handler = SIG_DFL;
