@@ -946,7 +946,7 @@ setup(void)
     updatedesktopnum();
     updatedesktop();
     updatedesktopnames();
-    updateviewport();
+    updatedesktopviewport();
 
     XCBWindowAttributes wa;
     /* xcb_event_mask_t */

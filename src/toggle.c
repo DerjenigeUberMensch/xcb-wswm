@@ -132,11 +132,21 @@ UserStats(const Arg *arg)
                 }
             }
         }
+
         for(; c; c = nextclient(c))
         {   
             Debug("%s", c->netwmname);
             Debug("%s", c->wmname);
             Debug0("");
+        }
+
+        Monitor *m;
+        for(m = _wm.mons; m; m = nextmonitor(m))
+        {
+            Debug("mx: %d", m->mx);
+            Debug("my: %d", m->my);
+            Debug("mw: %d", m->mw);
+            Debug("mh: %d", m->mh);
         }
     }
     else
@@ -199,11 +209,8 @@ FocusMonitor(const Arg *arg)
     {   return;
     }
 
-    if(_wm.selmon->desksel->sel)
-    {   unfocus(_wm.selmon->desksel->sel, 0);
-    }
-    _wm.selmon = m;
-    focus(NULL);
+    setmonsel(m);
+
     XCBFlush(_wm.dpy);
 }
 
@@ -403,8 +410,7 @@ DragWindow(
         if ((m = recttomon(c->x, c->y, c->w, c->h)) != _wm.selmon) 
         {
             setclientdesktop(c, m->desksel);
-            _wm.selmon = m;
-            focus(NULL);
+            setmonsel(m);
         }
         if(DOCKED(c))
         {   setfloating(c, 0);
@@ -671,8 +677,7 @@ ResizeWindow(const Arg *arg)
         if ((m = recttomon(c->x, c->y, c->w, c->h)) != _wm.selmon) 
         {
             setclientdesktop(c, m->desksel);
-            _wm.selmon = m;
-            focus(NULL);
+            setmonsel(m);
         }
         if(DOCKED(c))
         {   setfloating(c, 0);
@@ -883,8 +888,7 @@ ResizeWindowAlt(const Arg *arg)
         if ((m = recttomon(c->x, c->y, c->w, c->h)) != _wm.selmon) 
         {
             setclientdesktop(c, m->desksel);
-            _wm.selmon = m;
-            focus(NULL);
+            setmonsel(m);
         }
         if(DOCKED(c))
         {   setfloating(c, 0);

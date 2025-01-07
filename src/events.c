@@ -199,7 +199,6 @@ buttonpress(XCBGenericEvent *event)
     const XCBKeyCode keydetail  = ev->detail;
     const XCBTimestamp tim      = ev->time;
 
-
     (void)rootx;
     (void)rooty;
     (void)eventx;
@@ -215,16 +214,7 @@ buttonpress(XCBGenericEvent *event)
     Monitor *m = NULL;
     /* focus monitor if necessary */
     if ((m = wintomon(eventroot)))
-    {
-        if(m != _wm.selmon)
-        {
-            if(_wm.selmon->desksel->sel)
-            {   unfocus(_wm.selmon->desksel->sel, 1);
-            }
-            _wm.selmon = m;
-            focus(NULL);
-            sync = 1;
-        }
+    {   setmonsel(m);
     }
 
     Client *c;
@@ -364,12 +354,7 @@ motionnotify(XCBGenericEvent *event)
     //Debug("(w: %d, h: %d)", XCBDisplayWidth(_wm.dpy, _wm.screen), XCBDisplayHeight(_wm.dpy, _wm.screen));
     if((m = recttomon(rootx, rooty, 1, 1)) != mon && mon)
     {
-        Client *c = _wm.selmon->desksel->sel;
-        if(c)
-        {   unfocus(c, 1);
-        }
-        _wm.selmon = m;
-        focus(NULL);
+        setmonsel(m);
         sync = 1;
     }
     mon = m;
@@ -425,17 +410,14 @@ enternotify(XCBGenericEvent *event)
     c = wintoclient(eventwin);
     m = c ? c->desktop->mon : wintomon(eventwin);
 
-    if(m != _wm.selmon)
-    {
-        unfocus(_wm.selmon->desksel->sel, 1);
-        _wm.selmon = m;
-        sync = 1;
+    setmonsel(m);
+
+    if(c && c != _wm.selmon->desksel->sel)
+    {   focus(c);
     }
-    else if(!c || c == _wm.selmon->desksel->sel)
-    {   return;
-    }
-    focus(c);
+
     sync = 1;
+
     if(sync)
     {   XCBFlush(_wm.dpy);
     }

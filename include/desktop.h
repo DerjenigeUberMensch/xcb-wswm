@@ -138,11 +138,12 @@ void updatedesktop(void);
 void updatedesktopnames(void);
 /* Updates the current desktop count AKA how many desktops we got to the XServer */
 void updatedesktopnum(void);
+/* Updates the desktop viewport for windows */
+void updatedesktopviewport(void);
+/* Updates the workarea for desktop(s) */
+void updatedesktopworkarea(void);
 /* Updates focus order when before reorder() */
 void NonNull updatestackpriorityfocus(Desktop *desk);
-/* updates the viewport property to the XServer */
-void updateviewport(void);
-
 
 static const Layout layouts[LayoutTypeLAST] =
 {

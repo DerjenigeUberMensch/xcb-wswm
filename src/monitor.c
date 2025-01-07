@@ -285,6 +285,30 @@ setdesktopsel(Monitor *mon, Desktop *desksel)
     }
 }
 
+void 
+setmonsel(Monitor *m)
+{
+    if(_wm.selmon == m)
+    {   return;
+    }
+
+    if(m->desksel->sel)
+    {   unfocus(m->desksel->sel, 1);
+    }
+
+    _wm.selmon = m;
+
+    focus(NULL);
+
+    updatedesktopnum();
+    updatedesktopnames();
+    updatedesktopviewport();
+    updatedesktopworkarea();
+    updatedesktop();
+
+    Debug0("Changed Monitor.");
+}
+
 void
 setupcursors(void)
 {
@@ -406,7 +430,8 @@ updategeom(void)
                 attachfocus(c);
 			}
 			if (m == _wm.selmon)
-				_wm.selmon = _wm.mons;
+            {   _wm.selmon = _wm.mons;
+            }
 			cleanupmon(m);
 		}
 		free(unique);

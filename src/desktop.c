@@ -594,21 +594,88 @@ tile(Desktop *desk)
 void
 updatedesktop(void)
 {
-    u32 data = _wm.selmon->desksel->num;
-    XCBChangeProperty(_wm.dpy, _wm.root, netatom[NetCurrentDesktop], XCB_ATOM_CARDINAL, 32, XCB_PROP_MODE_REPLACE, (unsigned char *)&data, 1);
+    i32 base = _wm.selmon->desktops->num;
+    i32 offset = _wm.selmon->desksel->num;
+
+    i32 num = offset - base;
+
+    if(unlikely(num < 0))
+    {   
+        num = 0;
+        Debug0("Desktop num is negative, FIXME");
+    }
+
+    XCBChangeProperty(_wm.dpy, _wm.root, netatom[NetCurrentDesktop], XCB_ATOM_CARDINAL, 32, XCB_PROP_MODE_REPLACE, (unsigned char *)&num, 1);
 }
 
 void
 updatedesktopnames(void)
 {
-    XCBChangeProperty(_wm.dpy, _wm.root, netatom[NetDesktopNames], XCB_ATOM_STRING, 8, XCB_PROP_MODE_REPLACE, "~0", 3);
+    /* TODO */
 }
 
 void
 updatedesktopnum(void)
 {
-    i32 data =  _wm.selmon->deskcount;
+    i32 data = _wm.selmon->deskcount;
     XCBChangeProperty(_wm.dpy, _wm.root, netatom[NetNumberOfDesktops], XCB_ATOM_CARDINAL, 32, XCB_PROP_MODE_REPLACE, (unsigned char *)&data, 1);
+}
+
+void
+updatedesktopviewport(void)
+{
+    enum { x, y, data_spec = 2 };
+    enum { NO_SUPPORT_LARGE_DESKTOPS = 0 };
+
+    i32 data[data_spec];
+
+    /* As of 3.2.0 vox-wm does not support large desktops */
+
+    data[x] = NO_SUPPORT_LARGE_DESKTOPS;
+    data[y] = NO_SUPPORT_LARGE_DESKTOPS;
+    
+
+    XCBChangeProperty(_wm.dpy, _wm.root, netatom[NetDesktopViewport], XCB_ATOM_CARDINAL, 32, XCB_PROP_MODE_REPLACE, (unsigned char *)data, data_spec);
+}
+
+void
+updatedesktopworkarea(void)
+{
+    enum { x, y, w, h, data_spec = 4 };
+
+
+    i32 data[data_spec];
+
+    /* The Window Manager SHOULD calculate this space by taking the current page minus space occupied by dock and panel windows, 
+     * as indicated by the _NET_WM_STRUT or _NET_WM_STRUT_PARTIAL properties set on client windows.
+     *
+     * Should? So basically no. 
+     * Reason: Apps should read this hint when designing their application *should*, doesnt mean they do though.
+     *         Furthermore this simplifies things and apps trying to mess with our system a bit.
+     */
+    data[x] = _wm.selmon->mx;
+    data[y] = _wm.selmon->my;
+    data[w] = _wm.selmon->mw;
+    data[h] = _wm.selmon->mh;
+
+    u32 i;
+    u16 desktops = _wm.selmon->deskcount;
+    bool first = true;
+
+    enum XCBPropertyMode mode;
+
+    for(i = 0; i < desktops; ++i)
+    {
+        if(first)
+        { 
+            mode = XCBPropModeReplace;
+            first = false;    
+        }
+        else
+        {   mode = XCBPropModeAppend;
+        }
+        XCBChangeProperty(_wm.dpy, _wm.root, netatom[NetWorkarea], XCB_ATOM_CARDINAL, 32, mode, (unsigned char *)data, data_spec);
+    }
 }
 
 void
@@ -624,12 +691,4 @@ updatestackpriorityfocus(Desktop *desk)
         }
     }
 }
-
-void
-updateviewport(void)
-{
-    i32 data[2] = { 0, 0 };
-    XCBChangeProperty(_wm.dpy, _wm.root, netatom[NetDesktopViewport], XCB_ATOM_CARDINAL, 32, XCB_PROP_MODE_REPLACE, (unsigned char *)data, 2);
-}
-
 
