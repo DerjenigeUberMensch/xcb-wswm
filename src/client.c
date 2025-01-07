@@ -1179,7 +1179,7 @@ focusrealize(Client *c)
     if(c)
     {
         if(c->desktop->mon != _wm.selmon)
-        {   _wm.selmon = c->desktop->mon;
+        {   setmonsel(c->desktop->mon);
         }
         if(c->desktop != _wm.selmon->desksel)
         {   setdesktopsel(_wm.selmon, c->desktop);

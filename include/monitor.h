@@ -85,6 +85,8 @@ Monitor *FuncNullable nextmonitor(Monitor *monitor);
 void NonNull setdesktopcount(Monitor *m, uint16_t desktops);
 /* Sets the currently selected desktop */
 void NonNullAll setdesktopsel(Monitor *mon, Desktop *desksel);
+/* Sets the selected monitor and updates mon data */
+void setmonsel(Monitor *m);
 /* Sets up the cursors used for the WM. */
 void setupcursors(void);
 /* Updates 
