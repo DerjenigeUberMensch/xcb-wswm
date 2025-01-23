@@ -456,12 +456,23 @@ int
 stackpriority(Client *c1, Client *c2)
 {
     const u32 ewmhflag1 = c1->ewmhflags;
-    const u32 flags1 = c1->flags;
+    const u32 floating1 = c1->desktop->layout == Floating;
+    const u16 flags1 = c1->flags;
+    const u16 rstacknum1 = c1->rstacknum;
     const u32 ewmhflag2 = c2->ewmhflags;
-    const u32 flags2 = c2->flags;
+    const u32 floating2 = c2->desktop->layout == Floating;
+    const u16 flags2 = c2->flags;
+    const u16 rstacknum2 = c2->rstacknum;
 
     const u32 ewmhflags = ewmhflag1 ^ ewmhflag2;
     const u32 flags = flags1 ^ flags2;
+
+    enum 
+    SpecialPriorityEnumIndex
+    {
+        ConstantFlag, NonContstantState, SpecialPriorityEnumIndexLAST
+    };
+
 
     /* PRIORITY WHEN CHECKED: (IN ORDER)
      * HIGHEST [0]
@@ -473,6 +484,7 @@ stackpriority(Client *c1, Client *c2)
         WStateFlagBelow,
         WStateFlagHidden,
     };
+
     /* PRIORITY WHEN CHECKED: (IN ORDER)
      * HIGHEST [0]
      * MEDIUM  [1]
@@ -490,6 +502,17 @@ stackpriority(Client *c1, Client *c2)
         WStateFlagAbove,
         WTypeFlagDialog,
     };
+    /* PRIORITY WHEN CHECKED: (IN ORDER)
+     * HIGHEST [0]
+     * MEDIUM  [1]
+     * LOWEST  [2]
+     * 
+     * { CONSTANT_FLAG, NON_CONSTANT_CLIENT_CONDITION }
+     */
+    const u32 SPECIAL_PRIORITY[][SpecialPriorityEnumIndexLAST] = 
+    {
+        { ClientFlagFloating, !floating1 && !floating2 },
+    };
 
     int i;
     for(i = 0; i < LENGTH(BELOW_PRIORTY); ++i)
@@ -504,19 +527,17 @@ stackpriority(Client *c1, Client *c2)
         {   return __stack_priority_helper_above(ewmhflag1, ABOVE_PRIORITY[i]);
         }
     }
-    
+
     /* These are Special flags, they require extra handling :( */
-    if(flags & ClientFlagFloating)
-    {   
-        /* possible cache miss if reverse order due to desktop pointer indirection */
-        if(c1->desktop->layout != Floating && c2->desktop->layout != Floating)
-        {   return __stack_priority_helper_above(flags1, ClientFlagFloating);
+    for(i = 0; i < LENGTH(SPECIAL_PRIORITY); ++i)
+    {
+        if(flags & SPECIAL_PRIORITY[i][ConstantFlag] && SPECIAL_PRIORITY[i][NonContstantState])
+        {   return __stack_priority_helper_above(flags1, SPECIAL_PRIORITY[i][ConstantFlag]);
         }
     }
 
-
     /* return correct focus order */
-    return c1->rstacknum > c2->rstacknum;
+    return rstacknum1 > rstacknum2;
 }
 
 void
