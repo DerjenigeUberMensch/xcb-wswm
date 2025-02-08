@@ -1,3 +1,7 @@
+# vox-wm
+The vox-wm was intially a mission to create a window manager that could offer the same usability that a regular desktop while being simple to the end user.  
+While still maintaing the window manager like feel of multiple different layouts and simpled nature behaviour.
+
 ## Preview (Monocle)
 ![example_image_monocle](https://github.com/DerjenigeUberMensch/vox-wm/blob/Experimental/images/example.png)
 
