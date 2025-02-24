@@ -79,14 +79,6 @@ union ARGB
     uint32_t argb;  /* ARGB 32bit value */
 };
 
-#ifndef __C__LEGACY__ 
-#define __C__LEGACY__ #ifdef __cplusplus extern "C" { #endif
-#endif
-
-#ifndef __C__LEGACY__END__
-#define __C__LEGACY__END__ #ifdef __cplusplus } #endif
-#endif
-
 #ifndef M_STRINGIFY
 #define M_STRINGIFY(x)  #x
 #endif
@@ -106,6 +98,7 @@ union ARGB
 #ifndef FIELD_SIZEOF
 #define FIELD_SIZEOF(type, member) (sizeof(((type *)0)->member))
 #endif
+
 
 #ifndef MAX
 #define MAX(A, B)               ((A) > (B) ? (A) : (B))
@@ -369,11 +362,11 @@ union ARGB
 #endif
 
 #ifndef likely
-#define likely(X)    ((void)0)
+#define likely(X)    (!!X)
 #endif
 
 #ifndef unlikely
-#define unlikely(X) ((void)0)
+#define unlikely(X)  (!!X)
 #endif
 
 #ifndef NonNull
@@ -619,6 +612,45 @@ union ARGB
         __c__ = __n__;                          \
     }                                           \
     HEAD = __s__;
+
+
+
+/* Functions */
+
+/*
+ * Check if a block of memory is empty (Zero'd out).
+ *
+ * 11111111 <- Not Empty.
+ * 11110011 <- Not Empty.
+ * 00000000 <- Empty.
+ *
+ * RETURN: true if empty.
+ * RETURN: false otherwise.
+ */
+bool memempty(void *mem, size_t size);
+/*
+ * Check if a block of memory is not empty (Has atleast 1 bit filled of data).
+ *
+ * 00000000 <- Empty.
+ * 11111111 <- Nonempty.
+ * 11110011 <- Nonempty.
+ *
+ * RETURN: true if not empty.
+ * RETURN: false otherwise.
+ */
+bool memnonempty(void *mem, size_t size);
+/*
+ * Check if a block of memory is filled (one'd out).
+ *
+ * 10111111 <- Not filled.
+ * 00000000 <- Not filled.
+ * 11111111 <- Filled.
+ *
+ * RETURN: true if filled.
+ * RETURN: false otherwise.
+ */
+bool memfilled(void *mem, size_t size);
+
 
 
 
