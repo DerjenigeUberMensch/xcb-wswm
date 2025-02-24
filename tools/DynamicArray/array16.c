@@ -5,12 +5,12 @@
 #include "array16.h"
 #include "dynamic_array.h"
 
-GArray *
+GArray16 *
 GArrayCreate16(
     uint32_t base_allocate
     )
 {
-    GArray *ret = malloc(sizeof(GArray));
+    GArray16 *ret = malloc(sizeof(GArray16));
 
     if(ret)
     {
@@ -27,7 +27,7 @@ GArrayCreate16(
 
 int
 GArrayCreateFilled16(
-    GArray *array_return,
+    GArray16 *array_return,
     uint32_t base_allocate
     )
 {
@@ -43,7 +43,7 @@ GArrayCreateFilled16(
 
 void
 GArrayWipe16(
-    GArray *array
+    GArray16 *array
     )
 {
     if(!array)
@@ -54,7 +54,7 @@ GArrayWipe16(
 
 int
 GArrayResize16(
-    GArray *array,
+    GArray16 *array,
     uint32_t item_len
     )
 {
@@ -107,7 +107,7 @@ GArrayResize16(
 }
 int
 GArrayPushBack16(
-    GArray *array,
+    GArray16 *array,
     void *item_cpy
     )
 {
@@ -132,7 +132,7 @@ GArrayPushBack16(
 
 int
 GArrayPopBack16(
-    GArray *array
+    GArray16 *array
     )
 {
     if(!array)
@@ -151,7 +151,7 @@ GArrayPopBack16(
 
 int
 GArrayReplace16(
-    GArray *array,
+    GArray16 *array,
     void *item_cpy,
     uint32_t index
     )
@@ -179,7 +179,7 @@ GArrayReplace16(
 
 int
 GArrayInsert16(
-    GArray *array,
+    GArray16 *array,
     void *item_cpy,
     uint32_t index
     )
@@ -217,7 +217,7 @@ GArrayInsert16(
 
 int
 GArrayDelete16(
-    GArray *array,
+    GArray16 *array,
     uint32_t index
     )
 {
@@ -240,14 +240,14 @@ GArrayDelete16(
     {   memmove(dest, src, BYTES_MOVE);
     }
 
-    GArrayResize(array, array->data_len - 1);
+    GArrayResize16(array, array->data_len - 1);
     return EXIT_SUCCESS;
 }
 
 
 void *
 GArrayAt16(
-        GArray *array,
+        GArray16 *array,
         uint32_t index
         )
 {
@@ -260,7 +260,7 @@ GArrayAt16(
 
 int
 GArrayAtSafe16(
-        GArray *array,
+        GArray16 *array,
         uint32_t index,
         void *fill_return
         )
@@ -283,7 +283,7 @@ GArrayAtSafe16(
 
 uint32_t
 GArrayEnd16(
-        GArray *array
+        GArray16 *array
         )
 {
     if(array)
@@ -294,7 +294,7 @@ GArrayEnd16(
 
 uint32_t 
 GArrayStart16(
-        GArray *array
+        GArray16 *array
         )
 {   return (const unsigned int) 0;
 }

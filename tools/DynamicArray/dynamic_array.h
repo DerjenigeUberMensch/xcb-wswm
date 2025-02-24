@@ -42,7 +42,7 @@ typedef struct __GArray__ __GArray__;
  * Even had said that I still use encapsulation, and half the time I only do it for sustainability of the project. 
  * Otherwise why would I?
  */
-typedef uint32_t garray_i;
+typedef uint64_t garray_i;
 
 struct
 GArray
