@@ -5,12 +5,12 @@
 #include "array32.h"
 #include "dynamic_array.h"
 
-GArray *
+GArray32 *
 GArrayCreate32(
     uint32_t base_allocate
     )
 {
-    GArray *ret = malloc(sizeof(GArray));
+    GArray32 *ret = malloc(sizeof(GArray32));
 
     if(ret)
     {
@@ -27,7 +27,7 @@ GArrayCreate32(
 
 int
 GArrayCreateFilled32(
-    GArray *array_return,
+    GArray32 *array_return,
     uint32_t base_allocate
     )
 {
@@ -43,7 +43,7 @@ GArrayCreateFilled32(
 
 void
 GArrayWipe32(
-    GArray *array
+    GArray32 *array
     )
 {
     if(!array)
@@ -54,7 +54,7 @@ GArrayWipe32(
 
 int
 GArrayResize32(
-    GArray *array,
+    GArray32 *array,
     uint32_t item_len
     )
 {
@@ -107,7 +107,7 @@ GArrayResize32(
 }
 int
 GArrayPushBack32(
-    GArray *array,
+    GArray32 *array,
     void *item_cpy
     )
 {
@@ -132,7 +132,7 @@ GArrayPushBack32(
 
 int
 GArrayPopBack32(
-    GArray *array
+    GArray32 *array
     )
 {
     if(!array)
@@ -151,7 +151,7 @@ GArrayPopBack32(
 
 int
 GArrayReplace32(
-    GArray *array,
+    GArray32 *array,
     void *item_cpy,
     uint32_t index
     )
@@ -179,7 +179,7 @@ GArrayReplace32(
 
 int
 GArrayInsert32(
-    GArray *array,
+    GArray32 *array,
     void *item_cpy,
     uint32_t index
     )
@@ -217,7 +217,7 @@ GArrayInsert32(
 
 int
 GArrayDelete32(
-    GArray *array,
+    GArray32 *array,
     uint32_t index
     )
 {
@@ -247,7 +247,7 @@ GArrayDelete32(
 
 void *
 GArrayAt32(
-        GArray *array,
+        GArray32 *array,
         uint32_t index
         )
 {
@@ -260,7 +260,7 @@ GArrayAt32(
 
 int
 GArrayAtSafe32(
-        GArray *array,
+        GArray32 *array,
         uint32_t index,
         void *fill_return
         )
@@ -283,7 +283,7 @@ GArrayAtSafe32(
 
 uint32_t
 GArrayEnd32(
-        GArray *array
+        GArray32 *array
         )
 {
     if(array)
@@ -294,7 +294,7 @@ GArrayEnd32(
 
 uint32_t 
 GArrayStart32(
-        GArray *array
+        GArray32 *array
         )
 {   return (const unsigned int) 0;
 }

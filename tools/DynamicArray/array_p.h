@@ -30,6 +30,12 @@ GArrayResizeP(
     );
 
 int
+GArrayPushBackP(
+    GArrayP *array,
+    void *item_cpy
+    );
+
+int
 GArrayPopBackP(
     GArrayP *array
     );
