@@ -205,7 +205,7 @@ XCBKeysym
 XCBKeySymbolsGetKeySym(
         XCBKeySymbols *symbols,
         XCBKeyCode keycode,
-        uint8_t column
+        enum XCBKeysymColumn column
         )
 {   
     return xcb_key_symbols_get_keysym(symbols, keycode, column);
